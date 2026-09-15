@@ -1,0 +1,21 @@
+.page-title { font: var(--font-headline-md); color: var(--color-text-primary); margin-bottom: var(--spacing-lg); }
+.section-title { font: var(--font-headline-sm); color: var(--color-text-primary); margin: var(--spacing-xl) 0 var(--spacing-sm); }
+
+.banner-status {
+  margin-bottom: var(--spacing-lg);
+  background: var(--color-canvas);
+}
+.banner-status.banner-active { background: var(--color-secondary-tint); }
+.banner-status-title { font: var(--font-headline-sm); color: var(--color-text-primary); }
+.banner-status-subtitle { font: var(--font-body-md); color: var(--color-text-muted); margin-top: 4px; }
+
+.banner-warning {
+  background: var(--color-warning-tint);
+  color: var(--color-warning-strong);
+  margin-bottom: var(--spacing-md);
+}
+
+.account-list { display: flex; flex-direction: column; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); }
+.account-row { display: flex; gap: var(--spacing-lg); align-items: center; }
+.account-name { font: var(--font-label-md); color: var(--color-text-primary); width: 200px; }
+.account-meta { font: var(--font-body-sm); color: var(--color-text-muted); }

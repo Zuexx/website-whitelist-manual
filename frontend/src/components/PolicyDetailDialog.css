@@ -1,0 +1,35 @@
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.dialog-panel {
+  width: 640px;
+  max-height: 480px;
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+}
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+.dialog-content {
+  overflow: auto;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  white-space: pre;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: var(--spacing-md);
+}
