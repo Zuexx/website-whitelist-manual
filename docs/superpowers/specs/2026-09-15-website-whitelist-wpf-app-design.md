@@ -51,7 +51,7 @@ Stitch 畫面稿裡出現過 `BrowserGuestModeEnabled` 這個機碼名稱，但�
 
 - `IRegistryPolicyReader` — 讀出 Edge/Chrome 目前 HKLM 底下的實際值，組成 `PolicySnapshot`。供 Dashboard 顯示、Step 4 diff 預覽、Step 5 套用後驗證共用。
 - `IRegistryPolicyWriter` — 把 `WizardConfiguration` 套用成登錄機碼寫入（依上方資料模型表）。
-- `IRegistryBackupService` — 套用前用 `reg export` 把即將覆蓋的機碼匯出成 `%LOCALAPPDATA%\WebsiteWhitelistManual\Backups\Restore_Backup_yyyyMMdd_HHmmss.reg`。**v1 範圍**：只自動產生備份檔並在畫面上顯示檔名/路徑，不做應用程式內一鍵還原按鈕；還原方式是家長之後手動雙擊該 `.reg` 檔匯入即可。應用程式內還原按鈕列為 v1.1 candidate。
+- `IRegistryBackupService` — 套用前用 `reg export` 把即將覆蓋的機碼匯出。因為 `reg export` 一次只能匯出一個機碼，實作結果是一個以時間戳記命名的資料夾（`%LOCALAPPDATA%\WebsiteWhitelistManual\Backups\yyyyMMdd_HHmmss\`），裡面依瀏覽器各放一個檔案（`Edge.reg`、`Chrome.reg`）——不是單一檔名。**v1 範圍**：只自動產生備份檔並在畫面上顯示資料夾/檔名路徑，不做應用程式內一鍵還原按鈕；還原方式是家長之後手動雙擊該 `.reg` 檔匯入即可。應用程式內還原按鈕列為 v1.1 candidate。若目標機碼原本就不存在（例如全新機器從未套用過原則），該瀏覽器不需要備份，直接跳過，不算失敗。
 - `ILocalAccountInspector` — 唯讀列出本機所有使用者帳號，標出哪些是標準使用者、哪些是系統管理員群組成員。刻意不判斷「目前登入的是誰」——因為本程式透過 UAC 提權執行，讀到的 token 必為管理員，沒有參考價值；改為列出本機帳號清單讓家長自己核對哪個是小孩的帳號。
 
 **模型**：`BrowserTarget`（Edge/Chrome enum + 對應機碼路徑）、`AllowlistSite`（網域字串 + 可選顯示用分類標籤，標籤純粹是 UI 呈現、不寫入登錄檔）、`AdvancedOptionsState`（無痕/DevTools/帳號切換三個 bool）、`PolicySnapshot`（目前登錄檔實際狀態的唯讀快照）。
@@ -89,3 +89,9 @@ Registry 存取全部包一層 `IWindowsRegistry` 介面（薄封裝 `Microsoft.
 ## 下一步
 
 Spec 經使用者審閱後，交給 `writing-plans` skill 產出實作計畫，再開始寫 WPF 專案的實際 C#/XAML 原始碼。
+
+`WebsiteWhitelistManual.Core` 這半部（本文件所述的服務層/模型）已經照這份 spec 實作完成、測試通過、最終 review 過關（見 `2026-09-15-core-registry-services` 實作計畫）。下一份 WPF UI 計畫開始前，有幾個最終 review 發現、範圍上刻意留到這一步才處理的項目，寫下來以免遺漏：
+
+- `ILocalAccountInspector.GetRelevantAccounts()` 目前只回傳過濾掉內建帳號後的清單；本文件原意是「列出本機所有使用者帳號並標註」。若 WPF 端需要看到完整清單（含內建帳號），要在 `ILocalAccountInspector` 加一個 `GetAllAccounts()`，或確認過濾後的清單就是想要的行為並更新本文件措辭。
+- `IProcessRunner.Run(string fileName, string arguments)` 目前吃的是預先拼好的參數字串，寫真正的 Windows 實作（`WindowsProcessRunner`）時建議改用 `ProcessStartInfo.ArgumentList`（`IReadOnlyList<string>` 參數），避免手動 quote 字串的注入風險——目前雖不可被利用（參數都來自寫死的常數），但介面設計上值得先改。
+- Registry 讀寫服務目前對「值型態不符」（例如拿 DWORD 的名稱去讀字串）的行為只在 fake 裡定義成回傳 `null`；寫真正的 `WindowsRegistryAdapter` 時要決定這個情境該回傳 `null` 還是拋例外，並讓 fake 跟真實行為一致。
