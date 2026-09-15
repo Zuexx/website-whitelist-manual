@@ -1,0 +1,59 @@
+/* frontend/src/styles/tokens.css */
+:root {
+  /* Colors */
+  --color-primary: #0f766e;
+  --color-primary-hover: #115e59;
+  --color-primary-pressed: #134e4a;
+
+  --color-secondary: #10b981;
+  --color-secondary-tint: #ecfdf5;
+
+  --color-tertiary: #3b82f6;
+  --color-tertiary-tint: #eff6ff;
+
+  --color-warning: #d97706;
+  --color-warning-strong: #c2410c;
+  --color-warning-tint: #fffbeb;
+
+  --color-text-primary: #1e293b;
+  --color-text-body: #334155;
+  --color-text-muted: #64748b;
+
+  --color-border: #e2e8f0;
+  --color-canvas: #f8f9fa;
+  --color-surface: #ffffff;
+
+  --color-destructive-tint: #fef2f2;
+  --color-destructive-text: #b91c1c;
+  --color-destructive-hover: #fee2e2;
+
+  /* Radii */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-pill: 9999px;
+
+  /* Spacing */
+  --spacing-gutter: 16px;
+  --spacing-margin: 24px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 14px;
+  --spacing-lg: 20px;
+  --spacing-xl: 28px;
+
+  /* Typography */
+  --font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --font-headline-lg: 700 26px/34px var(--font-family);
+  --font-headline-md: 600 20px/28px var(--font-family);
+  --font-headline-sm: 600 16px/24px var(--font-family);
+  --font-body-lg: 400 15px/24px var(--font-family);
+  --font-body-md: 400 13.5px/20px var(--font-family);
+  --font-body-sm: 400 12px/18px var(--font-family);
+  --font-label-md: 500 13.5px/18px var(--font-family);
+  --font-label-sm: 600 11.5px/16px var(--font-family);
+
+  /* Elevation */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-modal: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px var(--color-primary);
+}
