@@ -2,7 +2,10 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebsiteWhitelistManual.App.Pages;
 using WebsiteWhitelistManual.App.Services;
+using WebsiteWhitelistManual.App.State;
+using WebsiteWhitelistManual.App.ViewModels;
 using WebsiteWhitelistManual.Core.Abstractions;
 using WebsiteWhitelistManual.Core.Services;
 
@@ -32,6 +35,21 @@ public partial class App : Application
                     services.AddSingleton<IRegistryBackupService, RegistryBackupService>();
                     services.AddSingleton<ILocalAccountInspector, LocalAccountInspector>();
                     services.AddSingleton<MainWindow>();
+
+                    services.AddSingleton<WizardConfigurationStore>();
+
+                    services.AddTransient<DashboardPage>();
+                    services.AddTransient<DashboardViewModel>();
+                    services.AddTransient<Step1BrowserPage>();
+                    services.AddTransient<Step1BrowserViewModel>();
+                    services.AddTransient<Step2SitesPage>();
+                    services.AddTransient<Step2SitesViewModel>();
+                    services.AddTransient<Step3AdvancedPage>();
+                    services.AddTransient<Step3AdvancedViewModel>();
+                    services.AddTransient<Step4ConfirmPage>();
+                    services.AddTransient<Step4ConfirmViewModel>();
+                    services.AddTransient<Step5CompletePage>();
+                    services.AddTransient<Step5CompleteViewModel>();
                 })
                 .UseDefaultServiceProvider(options =>
                 {
