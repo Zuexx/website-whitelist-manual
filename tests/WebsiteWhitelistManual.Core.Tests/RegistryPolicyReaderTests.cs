@@ -32,7 +32,6 @@ public class RegistryPolicyReaderTests
         registry.SetStringValue(@"SOFTWARE\Policies\Microsoft\Edge\URLBlocklist", "1", "*");
         registry.SetStringValue(@"SOFTWARE\Policies\Microsoft\Edge\URLAllowlist", "1", "example.com");
         registry.SetStringValue(@"SOFTWARE\Policies\Microsoft\Edge\URLAllowlist", "2", "www.example.com");
-        registry.EnsureSubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge");
         var reader = new RegistryPolicyReader(registry);
 
         var snapshot = reader.ReadSnapshot(new[] { BrowserTarget.Edge });

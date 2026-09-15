@@ -20,11 +20,22 @@ public class RegistryBackupServiceTests : IDisposable
 
     private static readonly DateTimeOffset FixedTimestamp = new(2026, 9, 15, 16, 42, 0, TimeSpan.Zero);
 
+    private static FakeWindowsRegistry MakeRegistryWithExistingPolicyKeys(params BrowserTarget[] targets)
+    {
+        var registry = new FakeWindowsRegistry();
+        foreach (var target in targets)
+        {
+            registry.EnsureSubKeyExists(target.RootPath);
+        }
+        return registry;
+    }
+
     [Fact]
     public void Backup_CreatesTimestampedSubfolder()
     {
         var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
-        var service = new RegistryBackupService(runner);
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge);
+        var service = new RegistryBackupService(runner, registry);
 
         var result = service.Backup(new[] { BrowserTarget.Edge }, _tempDirectory, FixedTimestamp);
 
@@ -36,7 +47,8 @@ public class RegistryBackupServiceTests : IDisposable
     public void Backup_InvokesRegExportForEachTarget()
     {
         var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
-        var service = new RegistryBackupService(runner);
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge, BrowserTarget.Chrome);
+        var service = new RegistryBackupService(runner, registry);
 
         service.Backup(new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, _tempDirectory, FixedTimestamp);
 
@@ -50,7 +62,8 @@ public class RegistryBackupServiceTests : IDisposable
     public void Backup_ReturnsSuccessTrue_WhenAllExportsSucceed()
     {
         var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
-        var service = new RegistryBackupService(runner);
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge);
+        var service = new RegistryBackupService(runner, registry);
 
         var result = service.Backup(new[] { BrowserTarget.Edge }, _tempDirectory, FixedTimestamp);
 
@@ -63,7 +76,8 @@ public class RegistryBackupServiceTests : IDisposable
     public void Backup_ReturnsSuccessFalse_WhenAnExportFails()
     {
         var runner = new FakeProcessRunner(new ProcessResult(1, string.Empty, "access denied"));
-        var service = new RegistryBackupService(runner);
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge);
+        var service = new RegistryBackupService(runner, registry);
 
         var result = service.Backup(new[] { BrowserTarget.Edge }, _tempDirectory, FixedTimestamp);
 
@@ -75,11 +89,43 @@ public class RegistryBackupServiceTests : IDisposable
     public void Backup_NamesEachFileAfterItsBrowser()
     {
         var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
-        var service = new RegistryBackupService(runner);
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge, BrowserTarget.Chrome);
+        var service = new RegistryBackupService(runner, registry);
 
         var result = service.Backup(new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, _tempDirectory, FixedTimestamp);
 
         Assert.Contains(result.BackupFilePaths, p => p.EndsWith("Edge.reg"));
         Assert.Contains(result.BackupFilePaths, p => p.EndsWith("Chrome.reg"));
+    }
+
+    [Fact]
+    public void Backup_SkipsExportForTargetsWithNoExistingPolicyKey()
+    {
+        var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
+        var registry = new FakeWindowsRegistry();
+        var service = new RegistryBackupService(runner, registry);
+
+        var result = service.Backup(new[] { BrowserTarget.Edge }, _tempDirectory, FixedTimestamp);
+
+        Assert.True(result.Success);
+        Assert.Empty(result.BackupFilePaths);
+        Assert.Empty(runner.Invocations);
+    }
+
+    [Fact]
+    public void Backup_OnlyExportsTargetsWithAnExistingPolicyKey()
+    {
+        var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge);
+        var service = new RegistryBackupService(runner, registry);
+
+        var result = service.Backup(new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, _tempDirectory, FixedTimestamp);
+
+        Assert.True(result.Success);
+        Assert.Single(runner.Invocations);
+        Assert.Contains(runner.Invocations, i => i.Arguments.Contains(@"HKLM\SOFTWARE\Policies\Microsoft\Edge"));
+        Assert.DoesNotContain(runner.Invocations, i => i.Arguments.Contains(@"HKLM\SOFTWARE\Policies\Google\Chrome"));
+        Assert.Single(result.BackupFilePaths);
+        Assert.Contains(result.BackupFilePaths, p => p.EndsWith("Edge.reg"));
     }
 }

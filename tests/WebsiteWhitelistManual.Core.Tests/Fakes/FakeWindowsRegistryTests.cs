@@ -112,6 +112,20 @@ public class FakeWindowsRegistryTests
     }
 
     [Fact]
+    public void EnsureSubKeyExists_AlsoCreatesAncestorKeys()
+    {
+        var registry = new FakeWindowsRegistry();
+
+        registry.EnsureSubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge\URLAllowlist");
+
+        Assert.True(registry.SubKeyExists(@"SOFTWARE"));
+        Assert.True(registry.SubKeyExists(@"SOFTWARE\Policies"));
+        Assert.True(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft"));
+        Assert.True(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge"));
+        Assert.True(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge\URLAllowlist"));
+    }
+
+    [Fact]
     public void ValueNames_AreCaseInsensitive()
     {
         var registry = new FakeWindowsRegistry();

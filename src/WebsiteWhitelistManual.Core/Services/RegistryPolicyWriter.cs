@@ -39,15 +39,27 @@ public sealed class RegistryPolicyWriter : IRegistryPolicyWriter
         {
             _registry.SetDwordValue(target.RootPath, target.IncognitoValueName, 1);
         }
+        else
+        {
+            _registry.DeleteValue(target.RootPath, target.IncognitoValueName);
+        }
 
         if (configuration.AdvancedOptions.DisableAccountSwitching)
         {
             _registry.SetDwordValue(target.RootPath, PolicyKeys.BrowserSigninValueName, 0);
         }
+        else
+        {
+            _registry.DeleteValue(target.RootPath, PolicyKeys.BrowserSigninValueName);
+        }
 
         if (configuration.AdvancedOptions.DisableDeveloperTools)
         {
             _registry.SetDwordValue(target.RootPath, PolicyKeys.DeveloperToolsAvailabilityValueName, 2);
+        }
+        else
+        {
+            _registry.DeleteValue(target.RootPath, PolicyKeys.DeveloperToolsAvailabilityValueName);
         }
     }
 

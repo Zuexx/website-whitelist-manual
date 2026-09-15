@@ -105,6 +105,21 @@ public class RegistryPolicyWriterTests
     }
 
     [Fact]
+    public void Apply_ClearsPreviouslySetFlag_WhenAdvancedOptionTurnedOff()
+    {
+        var registry = new FakeWindowsRegistry();
+        registry.SetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "InPrivateModeAvailability", 1);
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge }, new[] { MakeSite("example.com") },
+            new AdvancedOptionsState(DisableIncognito: false, DisableAccountSwitching: false, DisableDeveloperTools: false));
+
+        writer.Apply(config);
+
+        Assert.Null(registry.GetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "InPrivateModeAvailability"));
+    }
+
+    [Fact]
     public void Apply_WritesToEveryBrowserTarget()
     {
         var registry = new FakeWindowsRegistry();

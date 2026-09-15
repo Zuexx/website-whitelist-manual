@@ -11,9 +11,18 @@ public sealed class FakeWindowsRegistry : IWindowsRegistry
 
     public void EnsureSubKeyExists(string subKeyPath)
     {
-        if (!_store.ContainsKey(subKeyPath))
+        // A real registry key's existence always implies its ancestors
+        // exist, so creating a child key must also create every missing
+        // ancestor along the way (without disturbing ones that already
+        // exist).
+        var segments = subKeyPath.Split('\\');
+        for (var i = 0; i < segments.Length; i++)
         {
-            _store[subKeyPath] = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            var ancestorPath = string.Join('\\', segments.Take(i + 1));
+            if (!_store.ContainsKey(ancestorPath))
+            {
+                _store[ancestorPath] = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            }
         }
     }
 
