@@ -16,7 +16,7 @@ UI 視覺設計已由 Google Stitch 產出五個畫面稿（`stitch_website_allo
 3. **MVVM**：`CommunityToolkit.Mvvm`（source generator 版 `ObservableObject` / `RelayCommand`），搭配 `Microsoft.Extensions.Hosting` 做建構子注入，讓 registry 服務可被抽換成測試替身。
 4. **發佈方式**：`dotnet publish --self-contained`，單一 .exe，目標機器不需另裝 .NET Runtime。
 5. **權限模式**：`app.manifest` 設 `requireAdministrator`，啟動即跳 UAC。不另做應用程式內密碼/PIN（UAC 本身已是足夠的守門機制，見下方「排除範圍」）。
-6. **開發流程**：Claude 在 macOS 上寫完整 C#/XAML 原始碼；WPF 專案無法在 Mac 上編譯（`PresentationBuildTasks` 是 Windows-only），使用者在 Windows 上 `dotnet build`/`publish`，編譯期錯誤貼回來修，執行期/視覺問題需要截圖。UAC 授權與實際登錄檔寫入必須在使用者自己的機器或朋友的筆電上測，不在公司電腦上測。
+6. **開發流程**：Claude 在 macOS 上寫完整 C#/XAML 原始碼。**（2026-09-15 更新，經實測修正）**WPF 專案其實可以在 Mac 上 `dotnet build` 成功——在 csproj 加上 `<EnableWindowsTargeting>true</EnableWindowsTargeting>` 就能繞過 Windows-only 的建置限制，連 WPF-UI、XAML 標記編譯、`System.DirectoryServices.AccountManagement` 都一併驗證過可以編譯（詳見 `2026-09-15-wpf-app-shell` 實作計畫）。所以每個 task 都能先在 Mac 上用 `dotnet build` 抓編譯期錯誤，不用整批寫完才丟給使用者。但 `dotnet build` 只能證明「編得過」，執行期行為（UAC 跳出、視窗渲染、登錄檔實際讀寫）完全驗證不到——這些仍然只能在使用者自己的機器或朋友的筆電上測，不在公司電腦上測。
 7. **瀏覽器範圍（v1）**：只做 Edge + Chrome，不含 Firefox。兩者共用幾乎全部機碼結構，只有「停用無痕/隱私瀏覽」這一項政策名稱不同。
 8. **標準使用者帳號建立**：維持手動（照 `manual.html` 操作），工具不自動建立/修改 Windows 帳號。
 9. **導覽架構**：WPF-UI `NavigationView` 左側導覽，對齊 Stitch 稿子的佈局。
@@ -90,8 +90,16 @@ Registry 存取全部包一層 `IWindowsRegistry` 介面（薄封裝 `Microsoft.
 
 Spec 經使用者審閱後，交給 `writing-plans` skill 產出實作計畫，再開始寫 WPF 專案的實際 C#/XAML 原始碼。
 
-`WebsiteWhitelistManual.Core` 這半部（本文件所述的服務層/模型）已經照這份 spec 實作完成、測試通過、最終 review 過關（見 `2026-09-15-core-registry-services` 實作計畫）。下一份 WPF UI 計畫開始前，有幾個最終 review 發現、範圍上刻意留到這一步才處理的項目，寫下來以免遺漏：
+`WebsiteWhitelistManual.Core`（服務層/模型）跟 `WebsiteWhitelistManual.App` 的殼（DI 組裝、三個真實 Windows 服務實作、`FluentWindow`+`NavigationView` 外殼，見 `2026-09-15-core-registry-services` 與 `2026-09-15-wpf-app-shell` 兩份實作計畫）都已經照這份 spec 實作完成、測試/建置通過、最終 review 過關。
+
+已解決（原本列在這裡的待辦，現在已經處理掉）：
+- ~~`IProcessRunner.Run` 參數改用 `IReadOnlyList<string>`（`ProcessStartInfo.ArgumentList`）~~ — 已在 `wpf-app-shell` 計畫 Task 1 改掉，`WindowsProcessRunner` 直接用新介面實作。
+- ~~Registry 讀寫服務對「值型態不符」的行為~~ — `WindowsRegistryAdapter` 已決定回傳 `null`（`as string`/`as int?`），跟 fake 的行為一致。
+
+下一份計畫（實際的 6 個頁面 + ViewModel + 頁面切換邏輯）開始前，有幾個目前計畫刻意留到這一步才處理的項目，寫下來以免遺漏：
 
 - `ILocalAccountInspector.GetRelevantAccounts()` 目前只回傳過濾掉內建帳號後的清單；本文件原意是「列出本機所有使用者帳號並標註」。若 WPF 端需要看到完整清單（含內建帳號），要在 `ILocalAccountInspector` 加一個 `GetAllAccounts()`，或確認過濾後的清單就是想要的行為並更新本文件措辭。
-- `IProcessRunner.Run(string fileName, string arguments)` 目前吃的是預先拼好的參數字串，寫真正的 Windows 實作（`WindowsProcessRunner`）時建議改用 `ProcessStartInfo.ArgumentList`（`IReadOnlyList<string>` 參數），避免手動 quote 字串的注入風險——目前雖不可被利用（參數都來自寫死的常數），但介面設計上值得先改。
-- Registry 讀寫服務目前對「值型態不符」（例如拿 DWORD 的名稱去讀字串）的行為只在 fake 裡定義成回傳 `null`；寫真正的 `WindowsRegistryAdapter` 時要決定這個情境該回傳 `null` 還是拋例外，並讓 fake 跟真實行為一致。
+- `CommunityToolkit.Mvvm` 套件還沒加進 `WebsiteWhitelistManual.App.csproj`（只是原本規劃要用，這一版還沒有任何 ViewModel 用到它）——下一份計畫一開始就要 `dotnet add package`。
+- `MainWindow.xaml` 的 `NavigationView` 目前是 6 個平的選單項目（首頁 + 5 個步驟），沒有照 Stitch 稿子/本文件「首頁」在最上面、5 個步驟另外分組在「設定精靈導覽」底下的兩段式導覽呈現，也還沒加圖示（`Icon`）。下一份計畫要把分組跟圖示補上，同時把 `TargetPageType`/頁面切換邏輯接上。
+- `IProcessRunner.Run` 目前沒有逾時機制：如果子行程卡住，呼叫方（未來會是某個 ViewModel 的按鈕事件）會永遠卡住沒有回應。下一份計畫把 `Backup()` 接到 UI 之前，要決定逾時時間與呼叫的執行緒模型（背景執行緒 + `WaitForExit(timeout)`）。
+- `WindowsProcessRunner`（`WebsiteWhitelistManual.App/Services/WindowsProcessRunner.cs`）已修正為把非絕對路徑的檔名（例如 `"reg.exe"`）解析到 `Environment.SystemDirectory` 再啟動，避免子行程被解析成呼叫端執行檔所在目錄下的同名檔案（權限提升風險）——這個修正已經做了，下一份計畫接上真正的「套用」按鈕時不用再處理這塊，但要記得寫測試涵蓋這條路徑一旦真的被使用者觸發時的行為。
