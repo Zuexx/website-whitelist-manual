@@ -110,4 +110,17 @@ public class FakeWindowsRegistryTests
 
         Assert.Null(exception);
     }
+
+    [Fact]
+    public void ValueNames_AreCaseInsensitive()
+    {
+        var registry = new FakeWindowsRegistry();
+        registry.EnsureSubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge");
+
+        registry.SetStringValue(@"SOFTWARE\Policies\Microsoft\Edge", "PolicyName", "value1");
+
+        Assert.Equal("value1", registry.GetStringValue(@"SOFTWARE\Policies\Microsoft\Edge", "policyname"));
+        Assert.Equal("value1", registry.GetStringValue(@"SOFTWARE\Policies\Microsoft\Edge", "POLICYNAME"));
+        Assert.Equal("value1", registry.GetStringValue(@"SOFTWARE\Policies\Microsoft\Edge", "PolicyName"));
+    }
 }

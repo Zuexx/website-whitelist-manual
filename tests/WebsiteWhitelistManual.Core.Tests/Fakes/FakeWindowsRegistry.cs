@@ -13,7 +13,7 @@ public sealed class FakeWindowsRegistry : IWindowsRegistry
     {
         if (!_store.ContainsKey(subKeyPath))
         {
-            _store[subKeyPath] = new Dictionary<string, object>();
+            _store[subKeyPath] = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
     }
 
