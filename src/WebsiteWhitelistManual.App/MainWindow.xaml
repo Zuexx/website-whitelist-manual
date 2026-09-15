@@ -29,7 +29,8 @@
                 <ui:NavigationViewItem x:Name="Step5NavItem" Content="5. 完成與驗證" Icon="{ui:SymbolIcon CheckmarkStarburst24}" Tag="Step5"/>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.ContentOverlay>
-                <ContentControl x:Name="PageHost" Margin="{StaticResource Spacing.PageMargin}"/>
+                <Frame x:Name="PageHost" Margin="{StaticResource Spacing.PageMargin}"
+                       NavigationUIVisibility="Hidden"/>
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
     </Grid>
