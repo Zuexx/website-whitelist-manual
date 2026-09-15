@@ -44,7 +44,7 @@ public sealed class RegistryBackupService : IRegistryBackupService
             }
 
             var filePath = Path.Combine(backupDirectory, $"{target.Id}.reg");
-            var arguments = $"export \"HKLM\\{target.RootPath}\" \"{filePath}\" /y";
+            var arguments = new[] { "export", $@"HKLM\{target.RootPath}", filePath, "/y" };
             var result = _processRunner.Run("reg.exe", arguments);
 
             if (result.ExitCode != 0)

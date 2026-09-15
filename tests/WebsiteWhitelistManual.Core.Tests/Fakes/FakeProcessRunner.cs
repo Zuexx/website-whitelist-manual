@@ -2,7 +2,7 @@ using WebsiteWhitelistManual.Core.Abstractions;
 
 namespace WebsiteWhitelistManual.Core.Tests.Fakes;
 
-public sealed record RecordedInvocation(string FileName, string Arguments);
+public sealed record RecordedInvocation(string FileName, IReadOnlyList<string> Arguments);
 
 public sealed class FakeProcessRunner : IProcessRunner
 {
@@ -15,7 +15,7 @@ public sealed class FakeProcessRunner : IProcessRunner
 
     public List<RecordedInvocation> Invocations { get; } = new();
 
-    public ProcessResult Run(string fileName, string arguments)
+    public ProcessResult Run(string fileName, IReadOnlyList<string> arguments)
     {
         Invocations.Add(new RecordedInvocation(fileName, arguments));
         return _result;

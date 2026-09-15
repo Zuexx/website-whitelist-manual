@@ -128,4 +128,20 @@ public class RegistryBackupServiceTests : IDisposable
         Assert.Single(result.BackupFilePaths);
         Assert.Contains(result.BackupFilePaths, p => p.EndsWith("Edge.reg"));
     }
+
+    [Fact]
+    public void Backup_BuildsExportArgumentsInExpectedOrderAndCount()
+    {
+        var runner = new FakeProcessRunner(new ProcessResult(0, string.Empty, string.Empty));
+        var registry = MakeRegistryWithExistingPolicyKeys(BrowserTarget.Edge);
+        var service = new RegistryBackupService(runner, registry);
+
+        service.Backup(new[] { BrowserTarget.Edge }, _tempDirectory, FixedTimestamp);
+
+        var invocation = Assert.Single(runner.Invocations);
+        var expectedFilePath = Path.Combine(_tempDirectory, "20260915_164200", "Edge.reg");
+        Assert.Equal(
+            new[] { "export", @"HKLM\SOFTWARE\Policies\Microsoft\Edge", expectedFilePath, "/y" },
+            invocation.Arguments);
+    }
 }
