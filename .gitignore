@@ -1,3 +1,5 @@
 .worktrees/
 bin/
 obj/
+.DS_Store
+.python-version

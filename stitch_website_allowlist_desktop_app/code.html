@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-tertiary-fixed":"#001a42","inverse-surface":"#233144","tertiary-container":"#0165d8","surface-tint":"#006a63","tertiary-fixed-dim":"#adc6ff","on-tertiary-container":"#e4eaff","on-primary-fixed":"#00201d","surface-container-lowest":"#ffffff","outline":"#6e7977","surface":"#f8f9ff","on-primary-container":"#a3faef","surface-container-highest":"#d5e3fd","secondary-fixed-dim":"#4edea3","surface-dim":"#ccdbf4","surface-variant":"#d5e3fd","error":"#ba1a1a","inverse-on-surface":"#ebf1ff","on-primary":"#ffffff","tertiary-fixed":"#d8e2ff","on-surface":"#0d1c2f","primary-container":"#0f766e","on-surface-variant":"#3e4947","primary":"#005c55","inverse-primary":"#80d5cb","surface-container-high":"#dde9ff","tertiary":"#004eaa","on-error-container":"#93000a","on-secondary":"#ffffff","secondary-fixed":"#6ffbbe","on-secondary-container":"#00714d","on-secondary-fixed-variant":"#005236","secondary":"#006c49","on-error":"#ffffff","on-background":"#0d1c2f","surface-container-low":"#eff4ff","outline-variant":"#bdc9c6","error-container":"#ffdad6","on-tertiary":"#ffffff","secondary-container":"#6cf8bb","on-primary-fixed-variant":"#00504a","primary-fixed-dim":"#80d5cb","on-secondary-fixed":"#002113","surface-container":"#e6eeff","primary-fixed":"#9cf2e8","on-tertiary-fixed-variant":"#004395","surface-bright":"#f8f9ff","background":"#f8f9ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xl":"1.75rem","space-xs":"0.25rem","space-sm":"0.5rem","space-md":"0.875rem","margin":"1.5rem","gutter":"1rem","space-lg":"1.25rem"},"fontFamily":{"body-lg":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"body-md":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"label-md":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"body-sm":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"headline-sm":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"headline-lg":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"headline-md":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"title-window":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""],"label-sm":["\"Inter, \\\"Noto Sans TC\\\", \\\"Microsoft JhengHei\\\", sans-serif\""]},"fontSize":{"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}],"body-md":["13.5px",{"lineHeight":"20px","fontWeight":"400"}],"label-md":["13.5px",{"lineHeight":"18px","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"headline-lg":["26px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"title-window":["13px",{"lineHeight":"20px","fontWeight":"500"}],"label-sm":["11.5px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased select-none"><header class="fixed top-0 left-0 right-0 h-10 bg-surface-container-low/90 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex items-center justify-between px-space-md"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[16px]">verified_user</span><span class="font-title-window text-title-window text-on-surface font-medium">網站白名單設定工具 v2.4 · 系統管理員模式</span></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm"><span class="material-symbols-outlined text-[14px]">lock</span><span>管理員防護中</span></div><div class="flex items-center"><button aria-label="Minimize" class="w-9 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[15px]">remove</span></button><button aria-label="Maximize" class="w-9 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[13px]">crop_square</span></button><button aria-label="Close" class="w-9 h-10 flex items-center justify-center text-on-surface-variant hover:bg-error hover:text-on-error transition-colors" type="button"><span class="material-symbols-outlined text-[15px]">close</span></button></div></div></header><aside class="fixed left-0 top-10 bottom-0 w-64 bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex flex-col justify-between pt-space-lg pb-space-md px-space-md"><div class="flex flex-col gap-space-lg"><div class="flex items-center gap-space-sm px-space-xs"><div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><span class="material-symbols-outlined text-[22px]">shield_with_heart</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface leading-tight">白名單防護</span><span class="font-label-sm text-label-sm text-on-surface-variant">家長防護管理模式</span></div></div><div class="flex flex-col gap-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant px-space-xs uppercase tracking-wider">設定精靈導覽</span><nav class="flex flex-col gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-bold shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all bg-primary-container text-on-primary font-bold shadow-[0_1px_8px_rgba(0,0,0,0.04)]" data-path="choose-browsers" href="#"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">1</span><span class="font-label-md text-label-md">選擇瀏覽器</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="allowed-websites" href="#"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">2</span><span class="font-label-md text-label-md">允許的網站</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="advanced-options" href="#"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">3</span><span class="font-label-md text-label-md">進階選項</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="review-confirm" href="#"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">4</span><span class="font-label-md text-label-md">套用前確認</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="apply-verify" href="#"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">5</span><span class="font-label-md text-label-md">完成與驗證</span></a></nav></div></div><div class="flex flex-col gap-space-sm"><div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)] flex items-start gap-space-sm"><span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">shield</span><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface font-medium">王小明 (標準使用者)</span><span class="font-body-sm text-body-sm text-on-surface-variant">受保護帳號已鎖定</span></div></div><div class="flex items-center justify-between px-space-xs font-body-sm text-body-sm text-on-surface-variant"><a class="hover:text-primary transition-colors" data-path="advanced-settings" href="#">完整設定值</a><span>·</span><a class="hover:text-primary transition-colors" data-path="online-help" href="#">線上說明</a></div></div></aside><div class="pl-64"><div class="fixed top-10 left-64 right-0 h-14 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-30 flex items-center justify-between px-space-margin"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-[18px]">verified</span><span class="font-body-md text-body-md text-on-surface font-medium">安全狀態：白名單守護程序運行中</span><span class="font-body-sm text-body-sm text-on-surface-variant ml-space-xs">（最後更新：今日 09:30）</span></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant"><span class="material-symbols-outlined text-[15px] text-secondary">shield</span><span>已具備管理員權限保護</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><main class="relative pt-24 min-h-screen bg-surface w-full px-space-margin pb-space-xl"><div class="flex flex-col w-full gap-space-lg max-w-7xl mx-auto">
+<!-- Persistent Status Banner -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-headline-sm text-headline-sm text-on-surface">防護中</span>
+<span class="text-outline-variant">·</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Edge、Chrome 雙核心管制</span>
+<span class="text-outline-variant">·</span>
+<span class="font-label-md text-label-md text-primary bg-primary/10 px-space-xs py-0.5 rounded">5 個允許網站</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">原則生效時間：2026/09/15 09:30 (版本同步正常)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm self-end md:self-auto shrink-0">
+<button class="h-10 px-space-md rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">history</span>
+<span>檢視日誌 (14)</span>
+</button>
+<a class="h-10 px-space-md rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all flex items-center gap-space-xs shadow-sm" data-path="choose-browsers" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>編輯設定</span>
+</a>
+</div>
+</div>
+<!-- Hero Status Card -->
+<div class="relative overflow-hidden w-full bg-surface-container-lowest rounded-xl p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="absolute -right-12 -top-12 w-64 h-64 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute -left-12 -bottom-12 w-48 h-48 bg-secondary/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-space-lg relative z-10">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm tracking-wide font-medium">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            政策已生效 (Locked)
+          </span>
+<span class="font-label-sm text-label-sm text-outline">Windows GPO / Registry 核心防護</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">孩子的電腦正受到嚴格白名單防護中</h1>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-space-xs flex-wrap">
+<span class="material-symbols-outlined text-outline text-[18px]">account_circle</span>
+<span>受保護帳號：<strong class="text-on-surface">王小明 (標準使用者)</strong></span>
+<span class="text-outline-variant">·</span>
+<span>裝置識別：<span class="font-mono bg-surface-container px-1.5 py-0.5 rounded text-on-surface">LAPTOP-FAMILY-01</span></span>
+</p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap shrink-0">
+<button class="h-10 px-space-md rounded-lg bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-space-xs shadow-sm" id="btn-quick-test" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary">open_in_browser</span>
+<span>即時測試網址</span>
+</button>
+<button class="h-10 px-space-md rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all flex items-center gap-space-xs shadow-sm" id="btn-quick-add" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>快速新增允許網站</span>
+</button>
+<a class="h-10 px-space-md rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-space-xs" data-path="choose-browsers" href="#">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">app_registration</span>
+<span>設定精靈</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Four Key Metric Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Stat 1 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">管控運作架構</span>
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">security</span>
+</div>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface font-semibold">嚴格白名單模式</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">其餘所有外連全數主動阻斷</div>
+</div>
+<div class="flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>預設阻絕原則已綁定</span>
+</div>
+</div>
+<!-- Stat 2 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">受管制瀏覽器</span>
+<div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">web</span>
+</div>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface font-semibold">Edge 及 Chrome</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">已鎖定無痕與未授權擴充</div>
+</div>
+<div class="flex items-center gap-1 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>政策登錄機碼已密封</span>
+</div>
+</div>
+<!-- Stat 3 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">目前核准白名單</span>
+<div class="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+</div>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-on-surface font-semibold">5 個授權項目</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">含核心教育平台與數位百科</div>
+</div>
+<div class="flex items-center gap-1 text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">school</span>
+<span>教育白名單方案套用中</span>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between gap-space-md hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">今日攔截嘗試</span>
+<div class="w-8 h-8 rounded-lg bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</div>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-error font-semibold">已阻絕 14 次</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-1">未經許可之外部彈出視窗與廣告</div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>最近阻斷：12 分鐘前</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Layout below Hero -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Column: Current Allowed Sites (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">bookmarks</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">目前允許的精選網站 (快速檢視)</h2>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container flex items-center gap-0.5 transition-colors" data-path="allowed-websites" href="#">
+<span>完整清單管理</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<div class="flex flex-col gap-space-xs divide-y-0">
+<!-- Site Item 1 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">co_present</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface truncate">Google Classroom</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm shrink-0">班級作業</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline truncate font-mono">classroom.google.com</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">15 分鐘前連線</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-medium">已放行</span>
+</div>
+</div>
+<!-- Site Item 2 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]">translate</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface truncate">Cool English 英語線上學習</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm shrink-0">官方教育網</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline truncate font-mono">www.coolenglish.edu.tw</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">今日 08:42</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-medium">已放行</span>
+</div>
+</div>
+<!-- Site Item 3 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_library</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface truncate">均一教育平台</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm shrink-0">數學/科學</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline truncate font-mono">www.junyiacademy.org</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">昨日</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-medium">已放行</span>
+</div>
+</div>
+<!-- Site Item 4 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">code</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface truncate">MIT Scratch 程式設計</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm shrink-0">兒童編程</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline truncate font-mono">scratch.mit.edu</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">昨日</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-medium">已放行</span>
+</div>
+</div>
+<!-- Site Item 5 -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface truncate">維基百科 Wikipedia (中文)</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm shrink-0">知識查詢</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline truncate font-mono">zh.wikipedia.org</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">3 天前</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-medium">已放行</span>
+</div>
+</div>
+</div>
+<!-- Quick Add Site Trigger Button -->
+<button class="w-full py-space-sm px-space-md rounded-lg bg-surface-container-low/60 hover:bg-surface-container-high text-primary font-label-md text-label-md transition-all flex items-center justify-center gap-space-xs shadow-sm" id="btn-quick-add-dash" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>新增網站至現有白名單</span>
+</button>
+</div>
+<!-- Quick Visual Trend or Sparkline -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">ssid_chart</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">過去 7 天防護成效</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">共有效攔截 142 次未授權連線存取</span>
+</div>
+</div>
+<!-- Inline SVG Sparkline -->
+<div class="w-32 h-8">
+<svg class="w-full h-full text-secondary" fill="none" viewbox="0 0 100 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 20 L15 17 L30 18 L45 12 L60 14 L75 8 L90 10 L100 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M0 20 L15 17 L30 18 L45 12 L60 14 L75 8 L90 10 L100 4 V 24 H 0 Z" fill="currentColor" fill-opacity="0.12"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Right Column: Security Health Check & Policy Actions (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">防護狀態即時健康檢查</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded-full font-medium">全項通過</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Check Item 1 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Microsoft Edge 登錄原則</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">Policies\Microsoft\Edge\URLAllowlist 正常</span>
+</div>
+</div>
+<!-- Check Item 2 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Google Chrome 企業原則</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">Policies\Google\Chrome\URLAllowlist 正常</span>
+</div>
+</div>
+<!-- Check Item 3 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">無痕視窗存取限制</span>
+<span class="font-body-sm text-body-sm text-outline font-mono">IncognitoModeAvailability = 1 (強制停用無痕)</span>
+</div>
+</div>
+<!-- Check Item 4 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">孩子帳號權限層級驗證</span>
+<span class="font-body-sm text-body-sm text-outline">標準使用者群組，無修改系統管理者機碼之權限</span>
+</div>
+</div>
+</div>
+<!-- Policy Action Box -->
+<div class="bg-surface-container p-space-md rounded-lg flex flex-col gap-space-sm mt-space-xs">
+<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">manage_history</span>
+            政策異動選項
+          </span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">若學校專題需要開放新網站，或需進行網路環境檢修：</p>
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<a class="h-9 px-space-sm rounded bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1 shadow-sm" data-path="choose-browsers" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">edit_note</span>
+<span>進入精靈修改</span>
+</a>
+<button class="h-9 px-space-sm rounded bg-surface-container-lowest text-error font-label-sm text-label-sm hover:bg-error-container hover:text-on-error-container transition-colors flex items-center justify-center gap-1 shadow-sm" id="btn-pause-guard" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+<span>暫停防護 (需管理員)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Troubleshooting & Help Advice Callout -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-lg shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">lightbulb</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="font-headline-sm text-headline-sm text-on-surface">遇到部分教學網站無法正常登入或載入影片？</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          某些教育平台仰賴第三方驗證服務 (如 <span class="font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded text-body-sm">accounts.google.com</span> 或 <span class="font-mono text-on-surface bg-surface-container px-1 py-0.5 rounded text-body-sm">*.cdn.jsdelivr.net</span>)。若教學頁面出現空白或登入卡住，請在允許清單中納入該驗證伺服器網址。
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 self-end md:self-auto">
+<a class="h-10 px-space-md rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center gap-space-xs shadow-sm" data-path="advanced-settings" href="#">
+<span class="material-symbols-outlined text-[18px] text-outline">data_object</span>
+<span>查看完整設定值 (進階)</span>
+</a>
+</div>
+</div>
+<!-- Bottom Window Summary Footer -->
+<div class="w-full pt-space-xs pb-space-sm flex flex-col sm:flex-row items-center justify-between text-on-surface-variant font-body-sm text-body-sm gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[16px]">verified</span>
+<span>系統管理員防護模式已常駐 · 密碼原則已鎖定</span>
+</div>
+<div class="flex items-center gap-space-md">
+<a class="hover:text-primary transition-colors" data-path="advanced-settings" href="#">查看完整設定值 (進階機碼)</a>
+<span class="text-outline-variant">·</span>
+<a class="hover:text-primary transition-colors" data-path="online-help" href="#">線上排除問題說明書</a>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for buttons
+  document.getElementById('btn-quick-test')?.addEventListener('click', () => {
+    const testUrl = prompt('請輸入要測試的網址 (例如：https://scratch.mit.edu)：', 'https://');
+    if (testUrl && testUrl !== 'https://') {
+      const allowedDomains = ['classroom.google.com', 'coolenglish.edu.tw', 'junyiacademy.org', 'scratch.mit.edu', 'wikipedia.org'];
+      const isAllowed = allowedDomains.some(domain => testUrl.includes(domain));
+      if (isAllowed) {
+        alert('【測試結果：允許通過 ✅】\n此網址符合目前套用的白名單原則，孩子的瀏覽器將可正常開啟。');
+      } else {
+        alert('【測試結果：主動阻絕 🛑】\n此網址不在核准清單內，系統將自動跳轉至安全阻擋頁面。');
+      }
+    }
+  });
+
+  const handleQuickAdd = () => {
+    const newDomain = prompt('請輸入要快速加入允許清單的完整網域名稱：', 'e.g. pagamo.org');
+    if (newDomain && newDomain.trim()) {
+      alert(`已成功將「${newDomain.trim()}」排入登錄原則更新佇列！\n點擊「套用變更」後將立即生效。`);
+    }
+  };
+
+  document.getElementById('btn-quick-add')?.addEventListener('click', handleQuickAdd);
+  document.getElementById('btn-quick-add-dash')?.addEventListener('click', handleQuickAdd);
+
+  document.getElementById('btn-pause-guard')?.addEventListener('click', () => {
+    const confirmed = confirm('【警告：即將暫停白名單防護】\n這將需要系統管理員 UAC 權限。確定要暫時解開 Edge 與 Chrome 的網站存取管制嗎？');
+    if (confirmed) {
+      alert('已送出管理員身分驗證請求。防護已暫停 30 分鐘，計時結束後將自動重新上鎖。');
+    }
+  });
+</script></main></div></body></html>

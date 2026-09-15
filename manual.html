@@ -1,0 +1,603 @@
+<title>網站白名單設定手冊</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F6F1E7;
+  --surface:#FFFFFF;
+  --surface-alt:#ECE4D2;
+  --ink:#202B26;
+  --ink-soft:#57645C;
+  --border:#DBD1B9;
+  --allow:#2E6F5C;
+  --allow-bg:#E1EEE7;
+  --block:#B4502A;
+  --block-bg:#F5E3D5;
+  --focus:#2E6F5C;
+  --shadow: 0 1px 2px rgba(32,43,38,0.06), 0 6px 16px rgba(32,43,38,0.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151A17;
+    --surface:#1C2320;
+    --surface-alt:#232B27;
+    --ink:#ECEEE9;
+    --ink-soft:#A6B0A8;
+    --border:#37403A;
+    --allow:#63BFA0;
+    --allow-bg:#1E332B;
+    --block:#E2895C;
+    --block-bg:#3A2A1F;
+    --focus:#63BFA0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 20px rgba(0,0,0,0.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151A17;
+  --surface:#1C2320;
+  --surface-alt:#232B27;
+  --ink:#ECEEE9;
+  --ink-soft:#A6B0A8;
+  --border:#37403A;
+  --allow:#63BFA0;
+  --allow-bg:#1E332B;
+  --block:#E2895C;
+  --block-bg:#3A2A1F;
+  --focus:#63BFA0;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 20px rgba(0,0,0,0.35);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Public Sans", system-ui, "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  padding:0 20px;
+}
+::selection{background:var(--allow-bg); color:var(--ink);}
+a{color:var(--allow);}
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible{
+  outline:2px solid var(--focus); outline-offset:2px;
+}
+h1,h2,h3{
+  font-family:"IBM Plex Sans Condensed", system-ui, sans-serif;
+  text-wrap:balance;
+  margin:0;
+  letter-spacing:0.01em;
+}
+code, .mono, .regpath, td.val, .val{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+}
+
+.wrap{max-width:1180px; margin:0 auto; padding-block:28px 80px;}
+
+/* ---------- masthead ---------- */
+.masthead{
+  display:flex; flex-wrap:wrap; gap:24px;
+  align-items:flex-end; justify-content:space-between;
+  padding:28px 0 22px;
+  border-bottom:2px solid var(--ink);
+  margin-bottom:24px;
+}
+.masthead .title-block{max-width:640px;}
+.eyebrow{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--ink-soft); margin-bottom:8px; display:block;
+}
+h1.doc-title{font-size:clamp(28px,4vw,40px); font-weight:700; line-height:1.12;}
+.doc-sub{color:var(--ink-soft); margin-top:10px; font-size:15.5px; max-width:56ch;}
+.meta-badges{display:flex; gap:8px; flex-wrap:wrap;}
+.badge{
+  font-family:"IBM Plex Mono", monospace; font-size:12px;
+  border:1px solid var(--border); border-radius:5px;
+  padding:5px 10px; color:var(--ink-soft); background:var(--surface);
+  white-space:nowrap;
+}
+.badge.b-edge{color:var(--allow); border-color:var(--allow);}
+.badge.b-chrome{color:var(--block); border-color:var(--block);}
+
+/* ---------- layout: nav + main ---------- */
+.layout{display:grid; grid-template-columns:220px 1fr; gap:40px; align-items:start;}
+@media (max-width:820px){ .layout{grid-template-columns:1fr;} }
+
+nav.toc{
+  position:sticky; top:20px;
+  display:flex; flex-direction:column; gap:2px;
+  font-size:14px;
+  border-left:2px solid var(--border);
+  padding-left:14px;
+}
+@media (max-width:820px){
+  nav.toc{
+    position:static; border-left:none; padding-left:0;
+    flex-direction:row; flex-wrap:wrap; gap:8px;
+    margin-bottom:8px;
+  }
+  nav.toc a{
+    border:1px solid var(--border); border-radius:999px;
+    padding:6px 12px; background:var(--surface);
+  }
+}
+nav.toc a{
+  color:var(--ink-soft); text-decoration:none; padding:5px 0;
+  font-weight:600;
+}
+nav.toc a:hover{color:var(--ink);}
+nav.toc .toc-num{font-family:"IBM Plex Mono",monospace; color:var(--allow); margin-right:6px;}
+
+main{min-width:0;}
+
+section{padding-block:38px; border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+section .step-head{display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+.step-num{
+  font-family:"IBM Plex Mono", monospace; font-weight:600; font-size:14px;
+  color:var(--allow); background:var(--allow-bg);
+  border-radius:6px; padding:4px 9px; flex-shrink:0;
+}
+h2{font-size:23px; font-weight:700;}
+.section-sub{color:var(--ink-soft); font-size:15px; margin-top:8px; max-width:64ch;}
+
+p{max-width:66ch;}
+.lede{font-size:16.5px; color:var(--ink-soft); max-width:62ch;}
+
+/* ---------- callouts ---------- */
+.callout{
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:16px 18px; margin:20px 0; box-shadow:var(--shadow);
+  max-width:70ch;
+}
+.callout .ic{flex-shrink:0; margin-top:2px; color:var(--allow);}
+.callout.warn .ic{color:var(--block);}
+.callout.warn{border-color:var(--block);}
+.callout h4{font-size:14.5px; font-weight:700; margin-bottom:4px; font-family:"IBM Plex Sans Condensed",sans-serif;}
+.callout p{margin:0; font-size:14.5px; color:var(--ink-soft);}
+
+/* ---------- tables ---------- */
+.tblwrap{overflow-x:auto; margin:18px 0; border:1px solid var(--border); border-radius:10px;}
+table{width:100%; border-collapse:collapse; font-size:14.5px; min-width:560px;}
+caption{text-align:left; font-size:13px; color:var(--ink-soft); padding:10px 14px 0;}
+th,td{padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top;}
+thead th{
+  background:var(--surface-alt); font-family:"IBM Plex Sans Condensed",sans-serif;
+  font-weight:600; font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+tbody tr:last-child td{border-bottom:none;}
+tbody{background:var(--surface);}
+td .val{color:var(--allow); font-weight:600;}
+td .val.block-val{color:var(--block);}
+
+.regpath{
+  display:block; background:var(--surface-alt); border:1px solid var(--border);
+  border-radius:8px; padding:10px 14px; font-size:13.5px; margin:14px 0;
+  overflow-x:auto; white-space:pre; max-width:100%;
+}
+.regpath b{color:var(--allow);}
+
+/* ---------- diagrams ---------- */
+figure{margin:24px 0; max-width:100%;}
+figure svg{max-width:100%; height:auto; display:block; color:var(--ink);}
+figcaption{font-size:13px; color:var(--ink-soft); margin-top:10px; max-width:64ch;}
+.diagram-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px clamp(10px,3vw,28px); box-shadow:var(--shadow); overflow-x:auto;
+}
+
+/* ---------- browser mockup ---------- */
+.mockup{
+  border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  background:var(--surface); box-shadow:var(--shadow); max-width:560px; margin:18px 0;
+}
+.mockup .titlebar{
+  background:var(--surface-alt); padding:8px 12px; display:flex; align-items:center; gap:8px;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-soft); border-bottom:1px solid var(--border);
+}
+.mockup .dot{width:9px;height:9px;border-radius:50%; background:var(--border);}
+.mockup .body{padding:0;}
+.mockup .row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 16px; border-bottom:1px solid var(--border); font-size:14px;
+}
+.mockup .row:last-child{border-bottom:none;}
+.mockup .row.hit{background:var(--allow-bg);}
+.mockup .row .lbl{display:flex; align-items:center; gap:10px;}
+.mockup .row .arrow{color:var(--allow); font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600;}
+
+/* ---------- checklist ---------- */
+.checklist{list-style:none; margin:18px 0; padding:0; display:flex; flex-direction:column; gap:0; max-width:70ch;
+  border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface);}
+.checklist li{display:flex; gap:12px; align-items:flex-start; padding:13px 16px; border-bottom:1px solid var(--border);}
+.checklist li:last-child{border-bottom:none;}
+.checklist input[type="checkbox"]{
+  width:19px; height:19px; margin-top:2px; accent-color:var(--allow); flex-shrink:0; cursor:pointer;
+}
+.checklist label{cursor:pointer; font-size:14.8px;}
+.checklist .hint{display:block; color:var(--ink-soft); font-size:13px; margin-top:2px;}
+
+/* ---------- faq ---------- */
+details{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 18px; margin-bottom:10px; max-width:70ch;
+}
+details + details{margin-top:10px;}
+summary{font-weight:600; cursor:pointer; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:15.5px;}
+details p{margin-top:10px; color:var(--ink-soft); font-size:14.8px;}
+
+footer{
+  margin-top:40px; padding-top:24px; border-top:1px solid var(--border);
+  color:var(--ink-soft); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+ol.steps{margin:14px 0 0; padding-left:22px; max-width:66ch;}
+ol.steps li{margin-bottom:10px; font-size:15px;}
+ol.steps li b{color:var(--ink);}
+
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+@media (max-width:720px){ .two-col{grid-template-columns:1fr;} }
+.browser-card{
+  border:1px solid var(--border); border-radius:12px; background:var(--surface); padding:20px; box-shadow:var(--shadow);
+}
+.browser-card h3{font-size:17px; display:flex; align-items:center; gap:8px;}
+.browser-card.edge h3{color:var(--allow);}
+.browser-card.chrome h3{color:var(--block);}
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="title-block">
+      <span class="eyebrow">離線操作手冊 · Windows 11 Home</span>
+      <h1 class="doc-title">網站白名單設定手冊</h1>
+      <p class="doc-sub">把筆電鎖成「只能開你核准的網站，其他一律擋掉」。適用 Microsoft Edge 與 Google Chrome，全程不需要額外軟體。</p>
+    </div>
+    <div class="meta-badges">
+      <span class="badge">Windows 11 家用版</span>
+      <span class="badge b-edge">Edge</span>
+      <span class="badge b-chrome">Chrome</span>
+      <span class="badge">不需要網路</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="章節目錄">
+      <a href="#why"><span class="toc-num">00</span>原理</a>
+      <a href="#account"><span class="toc-num">01</span>建立子女帳號</a>
+      <a href="#edge"><span class="toc-num">02</span>設定 Edge</a>
+      <a href="#chrome"><span class="toc-num">03</span>設定 Chrome</a>
+      <a href="#lockdown"><span class="toc-num">04</span>防止繞過</a>
+      <a href="#verify"><span class="toc-num">05</span>驗證清單</a>
+      <a href="#faq"><span class="toc-num">06</span>常見問題</a>
+    </nav>
+
+    <main>
+
+      <!-- 00 WHY -->
+      <section id="why">
+        <div class="step-head"><h2>為什麼要做兩件事，不能只做一件</h2></div>
+        <p class="lede">單靠瀏覽器設定不夠——只要小朋友的帳號有「系統管理員」權限，他隨手就能改掉或刪掉下面做的設定。所以要「帳號權限」和「瀏覽器原則」兩道關卡一起上，缺一道，另一道就形同虛設。</p>
+
+        <div class="tblwrap">
+          <table>
+            <caption>兩道關卡各擋住什麼</caption>
+            <thead><tr><th>小朋友想做的事</th><th>帳號降為標準使用者</th><th>瀏覽器網址原則</th></tr></thead>
+            <tbody>
+              <tr><td>打開白名單外的網址</td><td>—</td><td><span class="val">✓ 擋住</span></td></tr>
+              <tr><td>開無痕視窗繞過紀錄</td><td>—</td><td><span class="val">✓ 擋住</span></td></tr>
+              <tr><td>安裝第二個瀏覽器</td><td><span class="val">✓ 擋住</span></td><td>—</td></tr>
+              <tr><td>自己打開登錄編輯器改設定</td><td><span class="val">✓ 擋住</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure>
+          <div class="diagram-card">
+            <svg viewBox="0 0 720 300" role="img" aria-label="Edge 與 Chrome 的登錄設定路徑示意圖：兩者共用 HKLM SOFTWARE Policies 這段路徑，之後分別接到 Microsoft Edge 與 Google Chrome 各自的資料夾，底下都有 URLBlocklist 與 URLAllowlist 兩個資料夾，差異只在停用「無痕模式」的原則名稱不同——Edge 叫 InPrivateModeAvailability，Chrome 叫 IncognitoModeAvailability。">
+              <defs>
+                <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="currentColor"/>
+                </marker>
+              </defs>
+              <!-- shared root -->
+              <rect x="255" y="10" width="210" height="38" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+              <text x="360" y="34" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12.5">HKLM\SOFTWARE\Policies</text>
+
+              <!-- fork lines -->
+              <path d="M330,48 L190,86" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow)"/>
+              <path d="M390,48 L530,86" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+              <!-- Edge branch header -->
+              <rect x="85" y="88" width="210" height="36" rx="7" fill="var(--allow-bg)" stroke="var(--allow)" stroke-width="1.6"/>
+              <text x="190" y="111" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="var(--allow)">Microsoft\Edge</text>
+
+              <!-- Chrome branch header -->
+              <rect x="425" y="88" width="210" height="36" rx="7" fill="var(--block-bg)" stroke="var(--block)" stroke-width="1.6"/>
+              <text x="530" y="111" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="var(--block)">Google\Chrome</text>
+
+              <!-- connectors down to cards -->
+              <line x1="190" y1="124" x2="190" y2="146" stroke="currentColor" stroke-width="1.4"/>
+              <line x1="530" y1="124" x2="530" y2="146" stroke="currentColor" stroke-width="1.4"/>
+
+              <!-- Edge card -->
+              <rect x="70" y="148" width="240" height="140" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <text x="86" y="172" font-family="IBM Plex Mono, monospace" font-size="12">URLBlocklist  ("1"="*")</text>
+              <text x="86" y="196" font-family="IBM Plex Mono, monospace" font-size="12">URLAllowlist  ("1".."n")</text>
+              <text x="86" y="220" font-family="IBM Plex Mono, monospace" font-size="12">DeveloperToolsAvailability=2</text>
+              <rect x="78" y="234" width="224" height="26" rx="5" fill="var(--allow-bg)"/>
+              <text x="86" y="251" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--allow)" font-weight="600">InPrivateModeAvailability=1</text>
+
+              <!-- Chrome card -->
+              <rect x="410" y="148" width="240" height="140" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <text x="426" y="172" font-family="IBM Plex Mono, monospace" font-size="12">URLBlocklist  ("1"="*")</text>
+              <text x="426" y="196" font-family="IBM Plex Mono, monospace" font-size="12">URLAllowlist  ("1".."n")</text>
+              <text x="426" y="220" font-family="IBM Plex Mono, monospace" font-size="12">DeveloperToolsAvailability=2</text>
+              <rect x="418" y="234" width="224" height="26" rx="5" fill="var(--block-bg)"/>
+              <text x="426" y="251" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--block)" font-weight="600">IncognitoModeAvailability=1</text>
+
+              <!-- diff connector -->
+              <path d="M302,247 L410,247" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 4"/>
+              <text x="360" y="238" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="11.5" fill="var(--ink-soft)">唯一名稱不同的一項</text>
+            </svg>
+          </div>
+          <figcaption>圖1 — Edge 與 Chrome 的登錄路徑幾乎一樣，只有「停用無痕模式」這一項政策的名稱不同：Edge 叫 <code>InPrivateModeAvailability</code>，Chrome 叫 <code>IncognitoModeAvailability</code>。其餘機碼名稱、資料型態完全共用。</figcaption>
+        </figure>
+
+        <figure>
+          <div class="diagram-card">
+            <svg viewBox="0 0 740 190" role="img" aria-label="判斷流程：小朋友輸入網址後，先比對允許清單 URLAllowlist，若在清單內就直接開啟網站；若不在清單內，才比對封鎖清單 URLBlocklist 的星號規則，顯示已封鎖頁面。允許清單的優先權高於封鎖清單。">
+              <defs>
+                <marker id="arrow2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="currentColor"/>
+                </marker>
+              </defs>
+              <rect x="10" y="70" width="140" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <text x="80" y="98" text-anchor="middle" font-size="12.5">小朋友輸入網址</text>
+
+              <path d="M150,93 L230,93" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow2)"/>
+              <rect x="232" y="65" width="170" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <text x="317" y="90" text-anchor="middle" font-size="12">在 URLAllowlist</text>
+              <text x="317" y="106" text-anchor="middle" font-size="12">清單內嗎？</text>
+
+              <path d="M402,80 L470,30" fill="none" stroke="var(--allow)" stroke-width="1.4" marker-end="url(#arrow2)"/>
+              <text x="430" y="45" font-size="11.5" fill="var(--allow)" font-weight="600">是</text>
+              <rect x="472" y="6" width="160" height="46" rx="8" fill="var(--allow-bg)" stroke="var(--allow)" stroke-width="1.4"/>
+              <text x="552" y="34" text-anchor="middle" font-size="12.5" fill="var(--allow)">✓ 開啟網站</text>
+
+              <path d="M402,110 L470,150" fill="none" stroke="var(--block)" stroke-width="1.4" marker-end="url(#arrow2)"/>
+              <text x="430" y="148" font-size="11.5" fill="var(--block)" font-weight="600">否</text>
+              <rect x="472" y="128" width="200" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <text x="572" y="151" text-anchor="middle" font-size="11.5">比對 URLBlocklist ("*")</text>
+              <text x="572" y="166" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">— 涵蓋所有網址</text>
+            </svg>
+          </div>
+          <figcaption>圖2 — 允許清單的優先權高於封鎖清單：只要網址列在 <code>URLAllowlist</code>，即使 <code>URLBlocklist</code> 設成 <code>*</code>（全部封鎖），該網址仍會放行。這就是為什麼「先擋全部、再放特定網址」這個順序能成立。</figcaption>
+        </figure>
+      </section>
+
+      <!-- 01 ACCOUNT -->
+      <section id="account">
+        <div class="step-head"><span class="step-num">STEP 01</span><h2>建立小朋友的「標準使用者」帳號</h2></div>
+        <p class="section-sub">這一步是整份手冊最重要的一步——沒有它，後面設定的原則隨時會被解除。</p>
+
+        <ol class="steps">
+          <li><b>設定</b> → <b>帳戶</b> → <b>家人與其他使用者</b> → 按「新增帳戶」。</li>
+          <li>帳戶類型選擇<b>「標準使用者」</b>，絕對不要選「系統管理員」。</li>
+          <li>用家長自己的帳號密碼繼續操作本手冊剩下的步驟（第 02～04 步都要用系統管理員身分執行）。</li>
+          <li>設定完成後，把系統管理員密碼收好，不要讓小朋友知道。</li>
+        </ol>
+
+        <div class="mockup" role="img" aria-label="Windows 設定裡家人與其他使用者頁面示意圖，標準使用者選項被框起來提示要選它">
+          <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>設定 › 帳戶 › 家人與其他使用者</div>
+          <div class="body">
+            <div class="row"><span class="lbl">帳戶類型</span></div>
+            <div class="row"><span class="lbl">○ 系統管理員</span></div>
+            <div class="row hit"><span class="lbl">● 標準使用者</span><span class="arrow">← 選這個</span></div>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <span class="ic" aria-hidden="true">⚠</span>
+          <div><h4>順序提醒</h4><p>先用管理員帳號把 02、03、04 步的原則都設好，最後才把小朋友的日常登入切到標準使用者帳號，避免中途卡在「沒有權限」的畫面。</p></div>
+        </div>
+      </section>
+
+      <!-- 02 EDGE -->
+      <section id="edge">
+        <div class="step-head"><span class="step-num">STEP 02</span><h2>設定 Edge 的網址白名單</h2></div>
+        <p class="section-sub">用「登錄編輯器」(regedit) 寫入原則。Windows 11 Home 沒有群組原則編輯器，但登錄編輯器一樣有效。</p>
+
+        <ol class="steps">
+          <li>用<b>系統管理員帳號</b>登入，按 <b>⊞ Win</b> 鍵，輸入 <code>regedit</code>，按 Enter，出現詢問時選「是」。</li>
+          <li>在上方網址列貼上以下路徑，按 Enter 直接跳過去：
+            <span class="regpath">HKEY_LOCAL_MACHINE\SOFTWARE\Policies\<b>Microsoft\Edge</b></span>
+            如果 <code>Edge</code> 資料夾不存在，在 <code>Microsoft</code> 上按右鍵 → 新增 → <b>機碼</b>，命名為 <code>Edge</code>。
+          </li>
+          <li>在 <code>Edge</code> 上按右鍵 → 新增 → <b>機碼</b>，命名為 <code>URLBlocklist</code>。點進去，在空白處按右鍵 → 新增 → <b>字串值</b>，名稱打 <code>1</code>，雙擊打開，數值填 <code>*</code>。</li>
+          <li>回到 <code>Edge</code>，同樣新增一個機碼 <code>URLAllowlist</code>。點進去，逐一新增字串值 <code>1</code>、<code>2</code>、<code>3</code>……，每一筆的數值填一個要開放的網址。</li>
+          <li>回到 <code>Edge</code> 這一層，新增下表三個 <b>DWORD (32 位元) 值</b>，用來關掉無痕模式、關掉登入切換、關掉開發人員工具。</li>
+        </ol>
+
+        <div class="tblwrap">
+          <table>
+            <caption>HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist（字串值）</caption>
+            <thead><tr><th>名稱</th><th>類型</th><th>數值</th></tr></thead>
+            <tbody><tr><td>1</td><td>REG_SZ</td><td class="val block-val">*</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="tblwrap">
+          <table>
+            <caption>HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist（字串值，逐一新增）</caption>
+            <thead><tr><th>名稱</th><th>類型</th><th>數值（範例）</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>REG_SZ</td><td class="val">example.com</td></tr>
+              <tr><td>2</td><td>REG_SZ</td><td class="val">www.example.com</td></tr>
+              <tr><td>3</td><td>REG_SZ</td><td class="val">example-school.edu</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tblwrap">
+          <table>
+            <caption>HKLM\SOFTWARE\Policies\Microsoft\Edge（DWORD 32 位元值，直接建在 Edge 這層）</caption>
+            <thead><tr><th>名稱</th><th>類型</th><th>數值</th><th>作用</th></tr></thead>
+            <tbody>
+              <tr><td>InPrivateModeAvailability</td><td>DWORD</td><td class="val">1</td><td>停用無痕視窗</td></tr>
+              <tr><td>BrowserSignin</td><td>DWORD</td><td class="val">0</td><td>不能切換登入別的帳號</td></tr>
+              <tr><td>DeveloperToolsAvailability</td><td>DWORD</td><td class="val">2</td><td>關閉開發人員工具，避免被繞過</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mockup" role="img" aria-label="登錄編輯器樹狀結構示意圖，顯示 Edge 資料夾下 URLBlocklist 與 URLAllowlist 兩個機碼，並提示在空白處按右鍵新增字串值">
+          <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>登錄編輯器 — 電腦\HKEY_LOCAL_MACHINE\...\Edge</div>
+          <div class="body">
+            <div class="row"><span class="lbl">📁 Microsoft</span></div>
+            <div class="row hit"><span class="lbl">　📁 Edge</span><span class="arrow">← 目前位置</span></div>
+            <div class="row"><span class="lbl">　　📁 URLBlocklist</span></div>
+            <div class="row"><span class="lbl">　　　📄 1 = "*"</span></div>
+            <div class="row"><span class="lbl">　　📁 URLAllowlist</span></div>
+            <div class="row"><span class="lbl">　　　📄 1 = "example.com"</span></div>
+            <div class="row"><span class="lbl">　　　📄 2 = "www.example.com"</span></div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <span class="ic" aria-hidden="true">↻</span>
+          <div><h4>套用設定</h4><p>全部新增完後重新開機一次（或執行 <code>gpupdate /force</code>），再打開 Edge 測試。</p></div>
+        </div>
+      </section>
+
+      <!-- 03 CHROME -->
+      <section id="chrome">
+        <div class="step-head"><span class="step-num">STEP 03</span><h2>設定 Chrome 的網址白名單</h2></div>
+        <p class="section-sub">做法跟 Edge 幾乎一樣，只是路徑換成 Google\Chrome，而且「停用無痕模式」的機碼名稱不同（見上方圖1）。如果這台筆電只用 Edge，這一步可以跳過。</p>
+
+        <div class="two-col">
+          <div class="browser-card edge">
+            <h3>Edge 路徑</h3>
+            <span class="regpath">HKLM\SOFTWARE\Policies\<b>Microsoft\Edge</b></span>
+            <p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;">無痕模式機碼：<code>InPrivateModeAvailability</code></p>
+          </div>
+          <div class="browser-card chrome">
+            <h3>Chrome 路徑</h3>
+            <span class="regpath">HKLM\SOFTWARE\Policies\<b>Google\Chrome</b></span>
+            <p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;">無痕模式機碼：<code>IncognitoModeAvailability</code></p>
+          </div>
+        </div>
+
+        <ol class="steps">
+          <li>在登錄編輯器網址列貼上：
+            <span class="regpath">HKEY_LOCAL_MACHINE\SOFTWARE\Policies\<b>Google\Chrome</b></span>
+            資料夾不存在就自己新增機碼（做法同 Edge 那一步）。
+          </li>
+          <li>在 <code>Chrome</code> 下新增機碼 <code>URLBlocklist</code>，新增字串值 <code>1</code> = <code>*</code>。</li>
+          <li>新增機碼 <code>URLAllowlist</code>，逐一新增字串值 <code>1</code>、<code>2</code>……，數值填要開放的網址（跟 Edge 那份名單一樣即可）。</li>
+          <li>在 <code>Chrome</code> 這層新增下表的 DWORD 值。</li>
+        </ol>
+
+        <div class="tblwrap">
+          <table>
+            <caption>HKLM\SOFTWARE\Policies\Google\Chrome（DWORD 32 位元值）</caption>
+            <thead><tr><th>名稱</th><th>類型</th><th>數值</th><th>作用</th></tr></thead>
+            <tbody>
+              <tr><td>IncognitoModeAvailability</td><td>DWORD</td><td class="val">1</td><td>停用無痕視窗</td></tr>
+              <tr><td>BrowserSignin</td><td>DWORD</td><td class="val">0</td><td>不能切換登入別的帳號</td></tr>
+              <tr><td>DeveloperToolsAvailability</td><td>DWORD</td><td class="val">2</td><td>關閉開發人員工具</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 04 LOCKDOWN -->
+      <section id="lockdown">
+        <div class="step-head"><span class="step-num">STEP 04</span><h2>防止小朋友繞過限制</h2></div>
+        <p class="section-sub">前面兩步鎖住了 Edge 和 Chrome，這一步確保他沒有「第三條路」。</p>
+
+        <ol class="steps">
+          <li>檢查這台筆電<b>目前裝了哪些瀏覽器</b>：只留 Edge（和/或 Chrome），把其他瀏覽器（Firefox、Opera 等）移除，或替它們也套用同樣的 <code>URLBlocklist</code>／<code>URLAllowlist</code> 原則（機碼路徑改成對應廠商的資料夾）。</li>
+          <li>確認小朋友的帳號真的是<b>標準使用者</b>（回到 STEP 01 檢查）——這樣他打開安裝檔時會被 UAC 視窗擋下，需要輸入管理員密碼。</li>
+          <li>把家長自己的系統管理員密碼設成小朋友猜不到的組合，不要用生日、名字。</li>
+        </ol>
+      </section>
+
+      <!-- 05 VERIFY -->
+      <section id="verify">
+        <div class="step-head"><span class="step-num">STEP 05</span><h2>驗證清單</h2></div>
+        <p class="section-sub">用小朋友的帳號登入後，逐項打勾確認。（打勾狀態只存在這台裝置的瀏覽器裡，換裝置檢視不會保留。）</p>
+
+        <ul class="checklist" id="checklist">
+          <li>
+            <input type="checkbox" id="c1"><label for="c1">用小朋友的帳號登入 Windows，確認是標準使用者介面（沒有「系統管理員」選項）
+              <span class="hint">在鎖定畫面或設定 → 帳戶確認</span></label>
+          </li>
+          <li>
+            <input type="checkbox" id="c2"><label for="c2">開啟 Edge，白名單內的網址能正常打開
+              <span class="hint">例如你加進 URLAllowlist 的網址</span></label>
+          </li>
+          <li>
+            <input type="checkbox" id="c3"><label for="c3">開啟 Edge，白名單外的網址顯示「已被您的系統管理員封鎖」
+              <span class="hint">試試 bing.com 或任何沒加進清單的網站</span></label>
+          </li>
+          <li>
+            <input type="checkbox" id="c4"><label for="c4">Edge 選單裡「開新的 InPrivate 視窗」選項消失或顯示為停用
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="c5"><label for="c5">若這台筆電也有 Chrome，重複以上三項測試同樣通過
+            </label>
+          </li>
+          <li>
+            <input type="checkbox" id="c6"><label for="c6">嘗試下載並執行一個瀏覽器安裝檔，出現要求管理員密碼的 UAC 視窗，且小朋友無法通過
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 06 FAQ -->
+      <section id="faq">
+        <div class="step-head"><h2>常見問題</h2></div>
+
+        <details>
+          <summary>白名單網站打不開，一直顯示已封鎖怎麼辦？</summary>
+          <p>最常見原因是子網域沒有分別列出——例如只加了 <code>example.com</code>，但小朋友真正要開的是 <code>m.example.com</code> 或 <code>www.example.com</code>。把實際網址列裡看到的完整網域，一字不差地加進 <code>URLAllowlist</code> 的下一個編號。</p>
+        </details>
+        <details>
+          <summary>需要一直保持連網才會生效嗎？</summary>
+          <p>不需要。這些設定寫在登錄檔（本機），開機後 Edge／Chrome 一啟動就會套用，離線也一樣有效。只有第一次打開這份手冊的網頁需要網路。</p>
+        </details>
+        <details>
+          <summary>之後想再新增或移除允許的網站怎麼做？</summary>
+          <p>用管理員帳號打開 regedit，回到 <code>URLAllowlist</code> 那個機碼，新增下一個編號的字串值，或直接修改／刪除既有的值即可，不用重灌或重新跑一次全部步驟。改完建議重開一次瀏覽器。</p>
+        </details>
+        <details>
+          <summary>可以用「家人集中管理」(Microsoft Family Safety) 取代這份手冊嗎？</summary>
+          <p>Family Safety 介面更親民、有使用時間報表，但它的網站限制需要小朋友用微軟帳號登入，而且防護強度不如「標準使用者 + 登錄原則」這麼硬，較懂電腦的孩子仍有機會繞過。兩者也可以並用：Family Safety 顧使用時間，這份手冊的設定負責硬性鎖網址。</p>
+        </details>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <span>離線可用 · 不含任何外部程式碼</span>
+    <span>寫給準備要設定這台筆電的家長</span>
+  </footer>
+
+</div>
+
+<script>
+try{
+  var boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+  boxes.forEach(function(b){
+    var saved = localStorage.getItem('wl-check-' + b.id);
+    if(saved === '1') b.checked = true;
+    b.addEventListener('change', function(){
+      try{ localStorage.setItem('wl-check-' + b.id, b.checked ? '1' : '0'); }catch(e){}
+    });
+  });
+}catch(e){}
+</script>
