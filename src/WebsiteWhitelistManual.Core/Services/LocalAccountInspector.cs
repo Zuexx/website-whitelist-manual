@@ -14,4 +14,7 @@ public sealed class LocalAccountInspector : ILocalAccountInspector
 
     public IReadOnlyList<LocalAccountInfo> GetRelevantAccounts()
         => _source.GetLocalAccounts().Where(a => !a.IsBuiltIn).ToList();
+
+    public IReadOnlyList<LocalAccountInfo> GetAllAccounts()
+        => _source.GetLocalAccounts();
 }

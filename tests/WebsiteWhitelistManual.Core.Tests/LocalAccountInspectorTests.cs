@@ -52,4 +52,20 @@ public class LocalAccountInspectorTests
 
         Assert.Empty(inspector.GetRelevantAccounts());
     }
+
+    [Fact]
+    public void GetAllAccounts_IncludesBuiltInAccounts()
+    {
+        var source = new FakeLocalAccountSource(new[]
+        {
+            new LocalAccountInfo("Kid", IsAdministrator: false, IsBuiltIn: false),
+            new LocalAccountInfo("Administrator", IsAdministrator: true, IsBuiltIn: true),
+        });
+        var inspector = new LocalAccountInspector(source);
+
+        var accounts = inspector.GetAllAccounts();
+
+        Assert.Equal(2, accounts.Count);
+        Assert.Contains(accounts, a => a.AccountName == "Administrator" && a.IsBuiltIn);
+    }
 }
