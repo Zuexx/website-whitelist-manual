@@ -10,29 +10,10 @@ namespace WebsiteWhitelistManual.App;
 
 public partial class App : Application
 {
-    private readonly IHost _host;
-
-    public App()
-    {
-        _host = Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
-            {
-                services.AddSingleton<IWindowsRegistry, WindowsRegistryAdapter>();
-                services.AddSingleton<IProcessRunner, WindowsProcessRunner>();
-                services.AddSingleton<ILocalAccountSource, WindowsLocalAccountSource>();
-                services.AddSingleton<IRegistryPolicyReader, RegistryPolicyReader>();
-                services.AddSingleton<IRegistryPolicyWriter, RegistryPolicyWriter>();
-                services.AddSingleton<IRegistryBackupService, RegistryBackupService>();
-                services.AddSingleton<ILocalAccountInspector, LocalAccountInspector>();
-                services.AddSingleton<MainWindow>();
-            })
-            .UseDefaultServiceProvider(options =>
-            {
-                options.ValidateOnBuild = true;
-                options.ValidateScopes = true;
-            })
-            .Build();
-    }
+    // Built inside OnStartup's try/catch (not here in the constructor) so a
+    // ValidateOnBuild failure is caught and shown to the user via MessageBox
+    // instead of crashing unhandled before OnStartup ever runs.
+    private IHost? _host;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -40,6 +21,25 @@ public partial class App : Application
 
         try
         {
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureServices((_, services) =>
+                {
+                    services.AddSingleton<IWindowsRegistry, WindowsRegistryAdapter>();
+                    services.AddSingleton<IProcessRunner, WindowsProcessRunner>();
+                    services.AddSingleton<ILocalAccountSource, WindowsLocalAccountSource>();
+                    services.AddSingleton<IRegistryPolicyReader, RegistryPolicyReader>();
+                    services.AddSingleton<IRegistryPolicyWriter, RegistryPolicyWriter>();
+                    services.AddSingleton<IRegistryBackupService, RegistryBackupService>();
+                    services.AddSingleton<ILocalAccountInspector, LocalAccountInspector>();
+                    services.AddSingleton<MainWindow>();
+                })
+                .UseDefaultServiceProvider(options =>
+                {
+                    options.ValidateOnBuild = true;
+                    options.ValidateScopes = true;
+                })
+                .Build();
+
             await _host.StartAsync();
 
             // Resolve the Core services once at startup to prove the DI
@@ -63,8 +63,12 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        await _host.StopAsync();
-        _host.Dispose();
+        if (_host is not null)
+        {
+            await _host.StopAsync();
+            _host.Dispose();
+        }
+
         base.OnExit(e);
     }
 }
