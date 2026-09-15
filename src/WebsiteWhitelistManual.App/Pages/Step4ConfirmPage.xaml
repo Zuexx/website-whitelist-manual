@@ -1,0 +1,30 @@
+<!-- src/WebsiteWhitelistManual.App/Pages/Step4ConfirmPage.xaml -->
+<Page x:Class="WebsiteWhitelistManual.App.Pages.Step4ConfirmPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="步驟 4：套用前確認">
+    <StackPanel>
+        <TextBlock Text="步驟 4：套用前確認所有安全性設定" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Brush.TextPrimary}"/>
+        <TextBlock Text="請仔細檢視即將寫入 Windows 系統政策 (Group Policy / Registry) 的防護規則。確認無誤後即可進行系統授權套用。"
+                   Foreground="{StaticResource Brush.TextBody}" Margin="0,8,0,16" TextWrapping="Wrap"/>
+
+        <ui:InfoBar Title="這個步驟需要系統管理員權限"
+                    Message="點擊下方「確認並套用」後，Windows 系統可能再次要求授權。這是正常且必要的流程，確保孩子的標準帳號無法自行修改此防護政策。"
+                    IsOpen="True" Severity="Informational" Margin="0,0,0,16"/>
+
+        <ui:InfoBar Title="套用失敗" Message="{Binding ErrorMessage}"
+                    IsOpen="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Bool}"
+                    Severity="Error" Margin="0,0,0,16"/>
+
+        <TextBlock Text="{Binding Configuration.BrowserTargets.Count, StringFormat='目標瀏覽器政策 ({0} 套)'}" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <TextBlock Text="{Binding Configuration.AllowlistSites.Count, StringFormat='允許訪問網站清單 ({0} 個網域)'}" Margin="0,0,0,16"/>
+
+        <CheckBox Content="我已仔細檢閱上述政策項目，確認立刻套用上述防護標準" IsChecked="{Binding HasAcknowledged, Mode=TwoWay}" Margin="0,0,0,16"/>
+
+        <TextBlock Text="{Binding LastBackupDirectory, StringFormat='上次備份已儲存至：{0}'}" Foreground="{StaticResource Brush.TextMuted}" Margin="0,0,0,16"
+                   Visibility="{Binding LastBackupDirectory, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+        <ui:Button Content="確認並套用" Command="{Binding ApplyCommand}" Appearance="Primary" HorizontalAlignment="Left"/>
+    </StackPanel>
+</Page>
