@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using WebsiteWhitelistManual.Core.Abstractions;
 
 namespace WebsiteWhitelistManual.App.Services;
@@ -12,7 +13,18 @@ public sealed class WindowsProcessRunner : IProcessRunner
 {
     public ProcessResult Run(string fileName, IReadOnlyList<string> arguments)
     {
-        var startInfo = new ProcessStartInfo(fileName)
+        // Resolve a bare filename (e.g. "reg.exe") against the system
+        // directory explicitly, rather than letting Process.Start fall back
+        // to Windows's default search order, which checks this app's own
+        // directory first. Because this app runs elevated
+        // (requireAdministrator), running it from a directory a standard
+        // user can write to would otherwise let them plant their own
+        // reg.exe alongside it and get it executed as Administrator.
+        var resolvedFileName = Path.IsPathRooted(fileName)
+            ? fileName
+            : Path.Combine(Environment.SystemDirectory, fileName);
+
+        var startInfo = new ProcessStartInfo(resolvedFileName)
         {
             RedirectStandardOutput = true,
             RedirectStandardError = true,

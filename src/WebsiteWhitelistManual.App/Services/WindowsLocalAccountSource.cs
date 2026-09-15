@@ -45,13 +45,19 @@ public sealed class WindowsLocalAccountSource : ILocalAccountSource
     private static HashSet<string> GetAdministratorGroupMemberNames(PrincipalContext context)
     {
         var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        using var administrators = GroupPrincipal.FindByIdentity(context, "Administrators");
+
+        // The built-in Administrators group is looked up by its well-known
+        // SID (S-1-5-32-544), not the localized display name "Administrators"
+        // — that name is only valid on English-locale Windows and would
+        // silently fail to match on other UI languages, making every account
+        // look like a non-administrator.
+        using var administrators = GroupPrincipal.FindByIdentity(context, IdentityType.Sid, "S-1-5-32-544");
         if (administrators is null)
         {
             return names;
         }
 
-        var members = administrators.GetMembers();
+        using var members = administrators.GetMembers();
         foreach (var member in members)
         {
             using var disposableMember = member;
