@@ -1,0 +1,16 @@
+appId: com.example.websitewhitelistmanual
+productName: 網站白名單設定工具
+directories:
+  output: ../dist-installer
+files:
+  - dist/**/*
+  - dist-electron/**/*
+extraResources:
+  - from: ../publish/api
+    to: api
+win:
+  target: nsis
+  artifactName: ${productName}-${version}-setup.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

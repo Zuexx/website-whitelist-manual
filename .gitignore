@@ -3,3 +3,7 @@ bin/
 obj/
 .DS_Store
 .python-version
+
+# Build outputs (produced via PUBLISHING.md, not committed — see GitHub Releases for distributable installers)
+publish/
+dist-installer/
