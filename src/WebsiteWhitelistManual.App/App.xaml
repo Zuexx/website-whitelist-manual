@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Theme/GuardianClearColors.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToProtectionTextConverter x:Key="BoolToProtectionTextConverter"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

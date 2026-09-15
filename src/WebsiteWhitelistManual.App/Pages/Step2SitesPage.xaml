@@ -1,0 +1,71 @@
+<!-- src/WebsiteWhitelistManual.App/Pages/Step2SitesPage.xaml -->
+<Page x:Class="WebsiteWhitelistManual.App.Pages.Step2SitesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="步驟 2：允許的網站">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="240"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+            <TextBlock Text="步驟 2：設定允許孩子訪問的網站" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Brush.TextPrimary}"/>
+            <TextBlock Text="除了以下列出的網址外，瀏覽器將自動封鎖所有其他網路訪問。子網域視為不同項目，例如 www.example.com 和 example.com 需分別加入。"
+                       Foreground="{StaticResource Brush.TextBody}" Margin="0,8,0,16" TextWrapping="Wrap"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                <ui:TextBox Text="{Binding NewDomainInput, UpdateSourceTrigger=PropertyChanged}" Width="280" Margin="0,0,8,0"
+                            PlaceholderText="輸入網域，例如 classroom.google.com"/>
+                <ui:TextBox Text="{Binding NewCategoryLabel, UpdateSourceTrigger=PropertyChanged}" Width="160" Margin="0,0,8,0"
+                            PlaceholderText="分類標籤 (選填)"/>
+                <ui:Button Content="新增至白名單" Command="{Binding AddSiteCommand}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ValidationError}" Foreground="{StaticResource Brush.WarningStrong}" Margin="0,0,0,12"
+                       Visibility="{Binding ValidationError, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+            <TextBlock Text="{Binding Sites.Count, StringFormat='目前已允許的網站清單 (共 {0} 個網址)'}" FontWeight="SemiBold" Margin="0,8,0,8"/>
+            <ItemsControl ItemsSource="{Binding Sites}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ui:CardControl Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Domain}" FontWeight="SemiBold"/>
+                                <ui:Badge Grid.Column="1" Content="{Binding CategoryLabel}" Margin="8,0" Appearance="Info"/>
+                                <ui:Button Grid.Column="2" Content="刪除"
+                                           Command="{Binding DataContext.RemoveSiteCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                           CommandParameter="{Binding}"/>
+                            </Grid>
+                        </ui:CardControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="白名單分類分佈" FontWeight="SemiBold" Margin="0,0,0,8"/>
+            <ItemsControl ItemsSource="{Binding CategoryBreakdown}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,8">
+                            <TextBlock>
+                                <Run Text="{Binding Label}"/>
+                                <Run Text=" — "/>
+                                <Run Text="{Binding Count}"/>
+                                <Run Text=" 個 ("/>
+                                <Run Text="{Binding Percentage}"/>
+                                <Run Text="%)"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</Page>
