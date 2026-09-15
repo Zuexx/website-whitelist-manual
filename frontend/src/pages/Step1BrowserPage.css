@@ -1,0 +1,13 @@
+.page-title { font: var(--font-headline-md); color: var(--color-text-primary); margin-bottom: var(--spacing-sm); }
+.page-description { color: var(--color-text-body); margin-bottom: var(--spacing-lg); max-width: 640px; }
+
+.browser-cards { display: flex; gap: var(--spacing-lg); margin-bottom: var(--spacing-xl); }
+.browser-card { width: 320px; cursor: pointer; display: block; }
+.browser-card-selected { border-color: var(--color-primary); background: var(--color-secondary-tint); }
+.browser-card-header { display: flex; align-items: center; gap: var(--spacing-sm); }
+.browser-card-name { font: var(--font-headline-sm); color: var(--color-text-primary); }
+.browser-card-description { color: var(--color-text-muted); font: var(--font-body-sm); margin-top: var(--spacing-xs); }
+
+.info-banner { background: var(--color-tertiary-tint); }
+.info-banner strong { color: var(--color-text-primary); }
+.info-banner p { margin-top: var(--spacing-xs); color: var(--color-text-body); font: var(--font-body-sm); }

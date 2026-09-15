@@ -1,0 +1,18 @@
+.step2-page { display: flex; gap: var(--spacing-lg); }
+.step2-main { flex: 1; }
+.step2-sidebar { width: 240px; flex-shrink: 0; }
+
+.page-title { font: var(--font-headline-md); color: var(--color-text-primary); margin-bottom: var(--spacing-sm); }
+.page-description { color: var(--color-text-body); margin-bottom: var(--spacing-lg); }
+.section-title { font: var(--font-headline-sm); color: var(--color-text-primary); margin: var(--spacing-md) 0; }
+
+.site-input-row { display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs); }
+.text-input { height: 42px; border: 1px solid #cbd5e1; border-radius: var(--radius-control); padding: 0 12px; flex: 1; }
+.text-input-narrow { flex: none; width: 160px; }
+.validation-error { color: var(--color-warning-strong); font: var(--font-body-sm); margin-bottom: var(--spacing-md); }
+
+.site-list { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.site-row { display: flex; align-items: center; gap: var(--spacing-sm); }
+.site-domain { flex: 1; font: var(--font-label-md); color: var(--color-text-primary); }
+
+.breakdown-row { font: var(--font-body-sm); color: var(--color-text-body); margin-bottom: var(--spacing-xs); }
