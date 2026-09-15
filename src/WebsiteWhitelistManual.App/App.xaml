@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ControlsDictionary />
                 <ui:ThemesDictionary Theme="Light" />
+                <ResourceDictionary Source="Theme/GuardianClearColors.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
