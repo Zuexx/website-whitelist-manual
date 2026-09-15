@@ -28,9 +28,13 @@ public sealed class WindowsProcessRunner : IProcessRunner
         using var process = Process.Start(startInfo)
             ?? throw new InvalidOperationException($"Failed to start process '{fileName}'.");
 
-        var standardOutput = process.StandardOutput.ReadToEnd();
-        var standardError = process.StandardError.ReadToEnd();
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+
         process.WaitForExit();
+
+        var standardOutput = stdoutTask.GetAwaiter().GetResult();
+        var standardError = stderrTask.GetAwaiter().GetResult();
 
         return new ProcessResult(process.ExitCode, standardOutput, standardError);
     }
