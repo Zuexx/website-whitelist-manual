@@ -120,6 +120,32 @@ public class RegistryPolicyWriterTests
     }
 
     [Fact]
+    public void Apply_DisablesEdgeNewTabPageContent_ToAvoidLockingOutTheAddressBar()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge }, new[] { MakeSite("example.com") }, new AdvancedOptionsState());
+
+        writer.Apply(config);
+
+        Assert.Equal(0, registry.GetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "NewTabPageContentEnabled"));
+    }
+
+    [Fact]
+    public void Apply_DoesNotSetNewTabPageContentValue_ForChrome()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Chrome }, new[] { MakeSite("example.com") }, new AdvancedOptionsState());
+
+        writer.Apply(config);
+
+        Assert.Null(registry.GetDwordValue(@"SOFTWARE\Policies\Google\Chrome", "NewTabPageContentEnabled"));
+    }
+
+    [Fact]
     public void Apply_WritesToEveryBrowserTarget()
     {
         var registry = new FakeWindowsRegistry();

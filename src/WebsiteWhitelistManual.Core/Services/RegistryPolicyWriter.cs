@@ -61,6 +61,15 @@ public sealed class RegistryPolicyWriter : IRegistryPolicyWriter
         {
             _registry.DeleteValue(target.RootPath, PolicyKeys.DeveloperToolsAvailabilityValueName);
         }
+
+        if (target.Id == BrowserId.Edge)
+        {
+            // Prevents Edge's New Tab Page from fetching ntp.msn.com content
+            // that URLBlocklist="*" would otherwise block, which would
+            // strand the browser on an address-bar-less error page — see
+            // PolicyKeys.EdgeNewTabPageContentEnabledValueName.
+            _registry.SetDwordValue(target.RootPath, PolicyKeys.EdgeNewTabPageContentEnabledValueName, 0);
+        }
     }
 
     public void RemoveAll(IReadOnlyList<BrowserTarget> targets)
