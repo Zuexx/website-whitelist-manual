@@ -3,6 +3,7 @@ import { spawn, type ChildProcess } from "node:child_process";
 import path from "node:path";
 import fs from "node:fs/promises";
 import os from "node:os";
+import http from "node:http";
 
 const isDev = !app.isPackaged;
 const API_TOKEN_PATH = path.join(
@@ -10,8 +11,19 @@ const API_TOKEN_PATH = path.join(
   "AppData", "Local", "WebsiteWhitelistManual", "api-token.txt",
 );
 
+const STATIC_MIME_TYPES: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+};
+
 let apiProcess: ChildProcess | null = null;
 let mainWindow: BrowserWindow | null = null;
+let staticServer: http.Server | null = null;
 
 function resolveApiExecutablePath(): string {
   // In development, the API is expected to already be running via a
@@ -57,7 +69,51 @@ async function waitForApiToken(maxAttempts = 40, delayMs = 250): Promise<void> {
   );
 }
 
-function createMainWindow(): void {
+// Vite's build emits `<script type="module">`, and Chromium refuses to run
+// module scripts loaded from a `file://` origin (it's treated as the null
+// origin, which module-script CORS rejects outright) — so `loadFile()`
+// against the built index.html renders a blank window with no visible
+// error, only a console CORS message. Serving the same static files over
+// loopback HTTP instead gives the renderer a real origin Chromium accepts,
+// without needing any change to the Vite output.
+function startStaticServer(rootDir: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer((req, res) => {
+      void (async () => {
+        const requestPath = decodeURIComponent((req.url ?? "/").split("?")[0] ?? "/");
+        const relativePath = requestPath === "/" ? "index.html" : requestPath.replace(/^\/+/, "");
+        const resolvedPath = path.join(rootDir, relativePath);
+
+        try {
+          const data = await fs.readFile(resolvedPath);
+          const contentType = STATIC_MIME_TYPES[path.extname(resolvedPath)] ?? "application/octet-stream";
+          res.writeHead(200, { "Content-Type": contentType });
+          res.end(data);
+        } catch {
+          // HashRouter keeps every client-side route in the URL fragment,
+          // which never reaches the server, so this fallback only matters
+          // for a stray or malformed request — not normal navigation.
+          const fallback = await fs.readFile(path.join(rootDir, "index.html"));
+          res.writeHead(200, { "Content-Type": STATIC_MIME_TYPES[".html"] });
+          res.end(fallback);
+        }
+      })();
+    });
+
+    server.on("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      const address = server.address();
+      if (address && typeof address === "object") {
+        staticServer = server;
+        resolve(address.port);
+      } else {
+        reject(new Error("Static server did not report a listening port."));
+      }
+    });
+  });
+}
+
+async function createMainWindow(): Promise<void> {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 720,
@@ -68,10 +124,15 @@ function createMainWindow(): void {
     },
   });
 
+  mainWindow.webContents.on("did-fail-load", (_event, errorCode, errorDescription) => {
+    console.error(`Renderer failed to load: ${errorCode} ${errorDescription}`);
+  });
+
   if (isDev) {
-    mainWindow.loadURL("http://localhost:5173");
+    await mainWindow.loadURL("http://localhost:5173");
   } else {
-    mainWindow.loadFile(path.join(process.resourcesPath, "app", "index.html"));
+    const port = await startStaticServer(path.join(__dirname, "..", "dist"));
+    await mainWindow.loadURL(`http://127.0.0.1:${port}/index.html`);
   }
 }
 
@@ -86,7 +147,7 @@ app.whenReady().then(async () => {
     // window creation entirely — the window still opens so the user can
     // at least see the app and any in-page error state.
   }
-  createMainWindow();
+  await createMainWindow();
 
   ipcMain.handle("get-api-token", async () => {
     return fs.readFile(API_TOKEN_PATH, "utf-8");
@@ -101,4 +162,5 @@ app.on("window-all-closed", () => {
 
 app.on("before-quit", () => {
   apiProcess?.kill();
+  staticServer?.close();
 });
