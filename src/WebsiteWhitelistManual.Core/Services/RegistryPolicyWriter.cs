@@ -63,6 +63,14 @@ public sealed class RegistryPolicyWriter : IRegistryPolicyWriter
         }
     }
 
+    public void RemoveAll(IReadOnlyList<BrowserTarget> targets)
+    {
+        foreach (var target in targets)
+        {
+            _registry.DeleteSubKeyTree(target.RootPath);
+        }
+    }
+
     private void ClearValues(string subKeyPath)
     {
         _registry.EnsureSubKeyExists(subKeyPath);

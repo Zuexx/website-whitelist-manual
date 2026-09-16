@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Circle,
+  FolderCheck,
   Globe2,
   ListChecks,
   RefreshCw,
   ShieldCheck,
   ShieldMinus,
+  ShieldOff,
   ShieldX,
   SlidersHorizontal,
   Users,
@@ -60,6 +62,8 @@ export function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [removedBackupDirectory, setRemovedBackupDirectory] = useState<string | null>(null);
 
   async function refresh() {
     setError(null);
@@ -81,6 +85,30 @@ export function DashboardPage() {
   useEffect(() => {
     refresh();
   }, []);
+
+  async function removeProtection() {
+    const confirmed = window.confirm(
+      "確定要移除白名單防護嗎？\n\n這會清除 Edge 和 Chrome 上所有的白名單限制與進階選項設定，瀏覽器恢復成未受管理的預設狀態。套用前會先備份目前設定。",
+    );
+    if (!confirmed) return;
+
+    setError(null);
+    setRemovedBackupDirectory(null);
+    setIsRemoving(true);
+    try {
+      const response = await apiClient.removePolicy();
+      if (!response.success) {
+        setError(response.errorMessage);
+        return;
+      }
+      setRemovedBackupDirectory(response.backupDirectory);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsRemoving(false);
+    }
+  }
 
   const configuredBrowsers = useMemo(
     () => (snapshot ? snapshot.browsers.filter((browser) => browser.policyKeyExists) : []),
@@ -115,6 +143,15 @@ export function DashboardPage() {
         </div>
       )}
 
+      {removedBackupDirectory && (
+        <div className="card banner-removed banner-row">
+          <FolderCheck className="banner-icon" />
+          <div className="banner-row-text">
+            已移除白名單防護，瀏覽器恢復成未受管理狀態。移除前的設定已備份至：{removedBackupDirectory}
+          </div>
+        </div>
+      )}
+
       <div className={`card banner-status banner-row ${isProtectionActive ? "banner-active" : ""}`}>
         <span className={`icon-chip icon-chip-${isProtectionActive ? "success" : "neutral"}`}>
           {isProtectionActive ? <ShieldCheck /> : <ShieldMinus />}
@@ -132,6 +169,13 @@ export function DashboardPage() {
         </div>
         <button className="btn btn-secondary" onClick={refresh} disabled={isRefreshing}>
           <RefreshCw className={isRefreshing ? "spin" : ""} /> 重新整理狀態
+        </button>
+        <button
+          className="btn btn-destructive"
+          onClick={removeProtection}
+          disabled={isRemoving || configuredBrowsers.length === 0}
+        >
+          <ShieldOff /> {isRemoving ? "移除中…" : "移除白名單防護"}
         </button>
       </div>
 

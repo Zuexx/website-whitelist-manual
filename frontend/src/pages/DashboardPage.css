@@ -18,6 +18,13 @@
 }
 .banner-warning .banner-icon { width: 20px; height: 20px; flex-shrink: 0; }
 
+.banner-removed {
+  background: var(--color-tertiary-tint);
+  color: var(--color-text-body);
+  margin-bottom: var(--spacing-md);
+}
+.banner-removed .banner-icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--color-tertiary); }
+
 .dashboard-columns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); align-items: start; }
 
 .account-list { display: flex; flex-direction: column; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }

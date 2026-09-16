@@ -53,4 +53,5 @@ export const apiClient = {
   getAccounts: (scope: "all" | "relevant") => request<LocalAccount[]>(`/api/accounts?scope=${scope}`),
   applyPolicy: (body: ApplyPolicyRequest) =>
     request<ApplyPolicyResponse>("/api/policy/apply", { method: "POST", body: JSON.stringify(body) }),
+  removePolicy: () => request<ApplyPolicyResponse>("/api/policy", { method: "DELETE" }),
 };

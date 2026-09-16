@@ -72,4 +72,16 @@ public sealed class FakeWindowsRegistry : IWindowsRegistry
             values.Remove(valueName);
         }
     }
+
+    public void DeleteSubKeyTree(string subKeyPath)
+    {
+        var toRemove = _store.Keys
+            .Where(key => key.Equals(subKeyPath, StringComparison.OrdinalIgnoreCase)
+                || key.StartsWith(subKeyPath + "\\", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        foreach (var key in toRemove)
+        {
+            _store.Remove(key);
+        }
+    }
 }

@@ -15,4 +15,11 @@ public interface IWindowsRegistry
     void SetStringValue(string subKeyPath, string valueName, string value);
     void SetDwordValue(string subKeyPath, string valueName, int value);
     void DeleteValue(string subKeyPath, string valueName);
+
+    /// <summary>
+    /// Deletes a key and every value/subkey beneath it. A no-op if the key
+    /// does not exist — matches the real Windows Registry's
+    /// DeleteSubKeyTree(throwOnMissingSubKey: false) semantics.
+    /// </summary>
+    void DeleteSubKeyTree(string subKeyPath);
 }

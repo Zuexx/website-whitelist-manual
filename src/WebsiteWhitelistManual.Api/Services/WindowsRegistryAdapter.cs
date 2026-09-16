@@ -59,4 +59,9 @@ public sealed class WindowsRegistryAdapter : IWindowsRegistry
         using var key = Registry.LocalMachine.OpenSubKey(subKeyPath, writable: true);
         key?.DeleteValue(valueName, throwOnMissingValue: false);
     }
+
+    public void DeleteSubKeyTree(string subKeyPath)
+    {
+        Registry.LocalMachine.DeleteSubKeyTree(subKeyPath, throwOnMissingSubKey: false);
+    }
 }

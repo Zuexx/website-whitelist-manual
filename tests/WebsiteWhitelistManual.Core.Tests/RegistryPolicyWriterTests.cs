@@ -133,4 +133,61 @@ public class RegistryPolicyWriterTests
         Assert.Equal("*", registry.GetStringValue(@"SOFTWARE\Policies\Microsoft\Edge\URLBlocklist", "1"));
         Assert.Equal("*", registry.GetStringValue(@"SOFTWARE\Policies\Google\Chrome\URLBlocklist", "1"));
     }
+
+    [Fact]
+    public void RemoveAll_DeletesThePolicyKeyEntirely()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge }, new[] { MakeSite("example.com") }, new AdvancedOptionsState());
+        writer.Apply(config);
+
+        writer.RemoveAll(new[] { BrowserTarget.Edge });
+
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge"));
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge\URLAllowlist"));
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge\URLBlocklist"));
+    }
+
+    [Fact]
+    public void RemoveAll_RemovesEveryRequestedTarget()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, new[] { MakeSite("example.com") }, new AdvancedOptionsState());
+        writer.Apply(config);
+
+        writer.RemoveAll(new[] { BrowserTarget.Edge, BrowserTarget.Chrome });
+
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge"));
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Google\Chrome"));
+    }
+
+    [Fact]
+    public void RemoveAll_DoesNotThrow_WhenTargetWasNeverConfigured()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+
+        var exception = Record.Exception(() => writer.RemoveAll(new[] { BrowserTarget.Edge }));
+
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void RemoveAll_DoesNotTouchUnrequestedTargets()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, new[] { MakeSite("example.com") }, new AdvancedOptionsState());
+        writer.Apply(config);
+
+        writer.RemoveAll(new[] { BrowserTarget.Edge });
+
+        Assert.False(registry.SubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge"));
+        Assert.True(registry.SubKeyExists(@"SOFTWARE\Policies\Google\Chrome"));
+    }
 }
