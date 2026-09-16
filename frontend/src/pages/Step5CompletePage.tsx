@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AlertTriangle, CheckCircle2, Eye, ExternalLink, RefreshCw, ShieldCheck, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Eye, ExternalLink, RefreshCw, RotateCcw, ShieldCheck, XCircle } from "lucide-react";
 import { apiClient } from "../api/client";
 import { useWizard } from "../state/WizardContext";
 import type { PolicySnapshot } from "../api/types";
@@ -88,6 +88,16 @@ export function Step5CompletePage() {
         </span>
         <div className="banner-row-text">
           <strong>{allPassed ? "保護已成功啟用！" : "驗證進行中"}</strong> 已將設定寫入 Windows 登錄檔原則。
+        </div>
+      </div>
+
+      <div className="card info-banner banner-row">
+        <span className="icon-chip icon-chip-sm icon-chip-warning"><RotateCcw /></span>
+        <div className="banner-row-text">
+          <strong>重要提醒：請重新啟動瀏覽器</strong>
+          <p>
+            Edge／Chrome 只會在啟動當下讀取一次防護規則。若孩子的瀏覽器目前已經開著，請先完全關閉所有 Edge／Chrome 視窗（工作管理員裡確認沒有殘留的背景行程）再重新打開，或直接重新啟動電腦，防護才會實際生效。這是瀏覽器本身的行為，不是本工具的問題。
+          </p>
         </div>
       </div>
 

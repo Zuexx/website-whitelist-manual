@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AlertTriangle, CheckCircle2, FolderCheck, Loader2, Lock, ShieldCheck, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, FolderCheck, Loader2, Lock, RotateCcw, ShieldCheck, XCircle } from "lucide-react";
 import { apiClient } from "../api/client";
 import { useWizard } from "../state/WizardContext";
 import type { PolicySnapshot } from "../api/types";
@@ -89,9 +89,20 @@ export function Step4ConfirmPage() {
       </label>
 
       {backupDirectory && (
-        <p className="backup-note">
-          <FolderCheck /> 上次備份已儲存至：{backupDirectory}
-        </p>
+        <>
+          <p className="backup-note">
+            <FolderCheck /> 上次備份已儲存至：{backupDirectory}
+          </p>
+          <div className="card info-banner banner-row">
+            <span className="icon-chip icon-chip-sm icon-chip-warning"><RotateCcw /></span>
+            <div className="banner-row-text">
+              <strong>重要提醒：請重新啟動瀏覽器</strong>
+              <p>
+                設定已寫入登錄檔，但 Edge／Chrome 只會在啟動當下讀取一次防護規則。若目前已經開著瀏覽器，請先完全關閉所有視窗（工作管理員裡確認沒有殘留的背景行程）再重新打開，或直接重新啟動電腦，防護才會實際生效。
+              </p>
+            </div>
+          </div>
+        </>
       )}
 
       <button

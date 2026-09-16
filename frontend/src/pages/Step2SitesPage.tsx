@@ -75,13 +75,15 @@ export function Step2SitesPage() {
         </div>
 
         <div className="site-input-row">
-          <span className="site-input-prefix"><Lock /></span>
-          <input
-            className="text-input site-input-domain"
-            placeholder="輸入網域，例如 classroom.google.com"
-            value={domainInput}
-            onChange={(event) => setDomainInput(event.target.value)}
-          />
+          <div className="site-input-group">
+            <span className="site-input-prefix"><Lock /></span>
+            <input
+              className="text-input site-input-domain"
+              placeholder="輸入網域，例如 classroom.google.com"
+              value={domainInput}
+              onChange={(event) => setDomainInput(event.target.value)}
+            />
+          </div>
           <input
             className="text-input text-input-narrow"
             placeholder="分類標籤 (選填)"
