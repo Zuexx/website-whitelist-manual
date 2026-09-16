@@ -23,6 +23,18 @@
   align-items: center;
   margin-bottom: var(--spacing-md);
 }
+.dialog-title {
+  display: flex; align-items: center; gap: var(--spacing-sm);
+  font: var(--font-headline-sm); color: var(--color-text-primary); margin: 0;
+}
+.dialog-title svg { width: 18px; height: 18px; color: var(--color-primary); }
+.dialog-close {
+  border: none; background: transparent; color: var(--color-text-muted);
+  width: 32px; height: 32px; border-radius: var(--radius-control);
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.dialog-close:hover { background: var(--color-canvas); }
+.dialog-close svg { width: 16px; height: 16px; }
 .dialog-content {
   overflow: auto;
   font-family: Consolas, monospace;

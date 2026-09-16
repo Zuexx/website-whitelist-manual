@@ -1,7 +1,8 @@
 .page-title { font: var(--font-headline-md); color: var(--color-text-primary); margin-bottom: var(--spacing-sm); }
 .page-description { color: var(--color-text-body); margin-bottom: var(--spacing-lg); }
 
-.option-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md); }
+.option-row { display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.option-text { flex: 1; min-width: 0; }
 .option-title { font: var(--font-headline-sm); color: var(--color-text-primary); }
 .option-description { color: var(--color-text-muted); font: var(--font-body-sm); margin: var(--spacing-xs) 0; }
 .option-registry-note { font-family: Consolas, monospace; font-size: 11px; color: var(--color-text-muted); }

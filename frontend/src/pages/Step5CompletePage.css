@@ -1,12 +1,15 @@
 .banner-success { background: var(--color-secondary-tint); margin-bottom: var(--spacing-lg); }
 .banner-success strong { color: var(--color-text-primary); }
+.banner-pending { background: var(--color-canvas); margin-bottom: var(--spacing-lg); }
 .banner-error { background: var(--color-warning-tint); color: var(--color-warning-strong); margin-bottom: var(--spacing-md); }
+.banner-error .banner-icon { width: 20px; height: 20px; flex-shrink: 0; }
 
 .section-title { font: var(--font-headline-sm); color: var(--color-text-primary); margin-bottom: var(--spacing-xs); }
 .page-description { color: var(--color-text-muted); font: var(--font-body-sm); margin-bottom: var(--spacing-md); }
 
 .verification-list { display: flex; flex-direction: column; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); }
-.verification-row { display: flex; justify-content: space-between; align-items: center; }
+.verification-row { display: flex; align-items: center; gap: var(--spacing-sm); }
+.verification-text { flex: 1; min-width: 0; }
 .verification-label { font: var(--font-label-md); color: var(--color-text-primary); }
 .verification-detail { font: var(--font-body-sm); color: var(--color-text-muted); margin-top: 2px; }
 

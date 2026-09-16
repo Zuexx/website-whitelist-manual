@@ -12,6 +12,8 @@ interface WizardContextValue extends WizardState {
   setAllowlistSites: (sites: AllowlistSiteInput[]) => void;
   setAdvancedOptions: (options: AdvancedOptions) => void;
   canApply: boolean;
+  hasApplied: boolean;
+  setHasApplied: (applied: boolean) => void;
 }
 
 const defaultAdvancedOptions: AdvancedOptions = {
@@ -26,6 +28,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   const [selectedBrowsers, setSelectedBrowsers] = useState<BrowserId[]>([]);
   const [allowlistSites, setAllowlistSites] = useState<AllowlistSiteInput[]>([]);
   const [advancedOptions, setAdvancedOptions] = useState<AdvancedOptions>(defaultAdvancedOptions);
+  const [hasApplied, setHasApplied] = useState(false);
 
   const value = useMemo<WizardContextValue>(() => ({
     selectedBrowsers,
@@ -35,7 +38,9 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     setAllowlistSites,
     setAdvancedOptions,
     canApply: selectedBrowsers.length > 0 && allowlistSites.length > 0,
-  }), [selectedBrowsers, allowlistSites, advancedOptions]);
+    hasApplied,
+    setHasApplied,
+  }), [selectedBrowsers, allowlistSites, advancedOptions, hasApplied]);
 
   return <WizardContext.Provider value={value}>{children}</WizardContext.Provider>;
 }

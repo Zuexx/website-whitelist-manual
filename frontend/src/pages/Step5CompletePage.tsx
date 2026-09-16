@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AlertTriangle, CheckCircle2, Eye, ExternalLink, RefreshCw, ShieldCheck, XCircle } from "lucide-react";
 import { apiClient } from "../api/client";
 import { useWizard } from "../state/WizardContext";
 import type { PolicySnapshot } from "../api/types";
@@ -45,16 +46,21 @@ export function Step5CompletePage() {
   const { allowlistSites, advancedOptions } = useWizard();
   const [rows, setRows] = useState<VerificationRow[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const expectedDomains = allowlistSites.map((site) => site.domain);
+  const allPassed = rows.length > 0 && rows.every((row) => row.passed);
 
   async function runVerification() {
     setError(null);
+    setIsRefreshing(true);
     try {
       const snapshot = await apiClient.getSnapshot();
       setRows(buildVerificationRows(snapshot, expectedDomains, advancedOptions.disableIncognito));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsRefreshing(false);
     }
   }
 
@@ -76,8 +82,13 @@ export function Step5CompletePage() {
 
   return (
     <div className="step5-page">
-      <div className="card banner-success">
-        <strong>保護已成功啟用！</strong> 已將設定寫入 Windows 登錄檔原則。
+      <div className={`card banner-row ${allPassed ? "banner-success" : "banner-pending"}`}>
+        <span className={`icon-chip icon-chip-${allPassed ? "success" : "neutral"}`}>
+          <ShieldCheck />
+        </span>
+        <div className="banner-row-text">
+          <strong>{allPassed ? "保護已成功啟用！" : "驗證進行中"}</strong> 已將設定寫入 Windows 登錄檔原則。
+        </div>
       </div>
 
       <h2 className="section-title">系統防護自動驗證報告</h2>
@@ -86,12 +97,20 @@ export function Step5CompletePage() {
         政策沒有可讀的攔截紀錄。
       </p>
 
-      {error && <div className="card banner-error">{error}</div>}
+      {error && (
+        <div className="card banner-error banner-row">
+          <AlertTriangle className="banner-icon" />
+          <div className="banner-row-text">{error}</div>
+        </div>
+      )}
 
       <div className="verification-list">
         {rows.map((row) => (
           <div key={row.label} className="card verification-row">
-            <div>
+            <span className={`health-row-icon ${row.passed ? "ok" : "fail"}`}>
+              {row.passed ? <CheckCircle2 /> : <XCircle />}
+            </span>
+            <div className="verification-text">
               <div className="verification-label">{row.label}</div>
               <div className="verification-detail">{row.detail}</div>
             </div>
@@ -102,14 +121,19 @@ export function Step5CompletePage() {
         ))}
       </div>
 
-      <button className="btn btn-secondary" onClick={runVerification}>重新驗證</button>
+      <button className="btn btn-secondary" onClick={runVerification} disabled={isRefreshing}>
+        <RefreshCw className={isRefreshing ? "spin" : ""} /> 重新驗證
+      </button>
 
-      <div className="card info-banner">
-        <strong>想親眼確認？</strong>
-        <p>按下方按鈕會用系統預設瀏覽器開啟一個已允許的網址，讓您親自檢查。本工具不會自動判讀開啟結果。</p>
+      <div className="card info-banner banner-row">
+        <span className="icon-chip icon-chip-sm icon-chip-info"><Eye /></span>
+        <div className="banner-row-text">
+          <strong>想親眼確認？</strong>
+          <p>按下方按鈕會用系統預設瀏覽器開啟一個已允許的網址，讓您親自檢查。本工具不會自動判讀開啟結果。</p>
+        </div>
       </div>
       <button className="btn btn-secondary" onClick={openAllowedSiteManually} disabled={allowlistSites.length === 0}>
-        開啟已允許的網址 (手動檢查)
+        <ExternalLink /> 開啟已允許的網址 (手動檢查)
       </button>
     </div>
   );

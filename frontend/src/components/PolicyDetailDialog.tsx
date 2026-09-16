@@ -1,3 +1,4 @@
+import { Braces, X } from "lucide-react";
 import type { PolicySnapshot } from "../api/types";
 import "./PolicyDetailDialog.css";
 
@@ -21,8 +22,10 @@ export function PolicyDetailDialog({ snapshot, onClose }: { snapshot: PolicySnap
     <div className="dialog-overlay" onClick={onClose}>
       <div className="dialog-panel" onClick={(event) => event.stopPropagation()}>
         <div className="dialog-header">
-          <h2>完整設定值</h2>
-          <button className="btn btn-secondary" onClick={onClose}>關閉</button>
+          <h2 className="dialog-title"><Braces /> 完整設定值</h2>
+          <button className="dialog-close" onClick={onClose} title="關閉">
+            <X />
+          </button>
         </div>
         <pre className="dialog-content">{formatSnapshot(snapshot)}</pre>
       </div>

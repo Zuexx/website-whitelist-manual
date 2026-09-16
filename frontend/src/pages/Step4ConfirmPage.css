@@ -6,12 +6,21 @@
 .info-banner p { margin-top: var(--spacing-xs); font: var(--font-body-sm); color: var(--color-text-body); }
 
 .banner-error { background: var(--color-warning-tint); color: var(--color-warning-strong); margin-bottom: var(--spacing-md); }
+.banner-error .banner-icon { width: 20px; height: 20px; flex-shrink: 0; }
 
-.summary-row { margin-bottom: var(--spacing-md); font: var(--font-label-md); color: var(--color-text-primary); }
+.summary-row { margin-bottom: var(--spacing-md); font: var(--font-label-md); color: var(--color-text-primary); display: flex; align-items: center; gap: var(--spacing-sm); }
+.summary-row-icon { width: 18px; height: 18px; color: var(--color-primary); flex-shrink: 0; }
 
 .current-state { margin-bottom: var(--spacing-lg); }
 .current-state strong { color: var(--color-text-primary); }
-.current-state-row { font: var(--font-body-sm); color: var(--color-text-muted); margin-top: var(--spacing-xs); }
+.current-state-row { display: flex; align-items: center; gap: 6px; font: var(--font-body-sm); color: var(--color-text-muted); margin-top: var(--spacing-xs); }
+.current-state-icon { width: 15px; height: 15px; flex-shrink: 0; }
+.current-state-icon.ok { color: var(--color-secondary); }
+.current-state-icon.neutral { color: var(--color-text-muted); }
 
 .acknowledge-row { display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md); font: var(--font-body-md); }
-.backup-note { color: var(--color-text-muted); font: var(--font-body-sm); margin-bottom: var(--spacing-md); }
+.backup-note {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--color-text-muted); font: var(--font-body-sm); margin-bottom: var(--spacing-md);
+}
+.backup-note svg { width: 14px; height: 14px; color: var(--color-secondary); flex-shrink: 0; }
