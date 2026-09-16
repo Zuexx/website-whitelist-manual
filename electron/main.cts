@@ -41,14 +41,28 @@ function startApiProcessIfPackaged(): void {
     return;
   }
   const exePath = resolveApiExecutablePath();
-  apiProcess = spawn(exePath, [], {
-    // shell:false (the default) is required here — it spawns the target
-    // executable directly so Windows honors its embedded app.manifest's
-    // requireAdministrator elevation. Setting shell:true would run it
-    // under cmd.exe instead, which complicates (though does not
-    // necessarily break) manifest-based elevation — do not add it.
-    stdio: "ignore",
-  });
+
+  // node:child_process.spawn() launches the target via CreateProcess(),
+  // which — unlike double-clicking the exe or Start-Process -Verb RunAs —
+  // does NOT honor an embedded app.manifest's requireAdministrator
+  // elevation: Windows returns ERROR_ELEVATION_REQUIRED and CreateProcess
+  // simply fails (no UAC prompt, no running process, often no error
+  // Node surfaces either). Only ShellExecuteEx-based launchers trigger
+  // the UAC consent dialog for a manifest-elevated target. PowerShell's
+  // Start-Process -Verb RunAs goes through ShellExecuteEx, so shelling
+  // out to it here is what actually produces the UAC prompt — this was
+  // verified failing silently with plain spawn() and working via this
+  // PowerShell route on a real packaged build.
+  apiProcess = spawn(
+    "powershell.exe",
+    [
+      "-NoProfile",
+      "-WindowStyle", "Hidden",
+      "-Command",
+      `Start-Process -FilePath '${exePath}' -Verb RunAs -WindowStyle Hidden`,
+    ],
+    { stdio: "ignore" },
+  );
   apiProcess.on("error", (err) => {
     console.error("Failed to start WebsiteWhitelistManual.Api:", err);
   });
@@ -57,7 +71,16 @@ function startApiProcessIfPackaged(): void {
 async function waitForApiToken(maxAttempts = 40, delayMs = 250): Promise<void> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
+      // Checking only that the token file exists isn't enough: Program.cs
+      // writes it to disk BEFORE app.Run() actually starts Kestrel
+      // listening, so there's a real window where the file is readable but
+      // a fetch to the API still fails outright (connection refused) —
+      // which the renderer has no automatic retry for, so a request fired
+      // in that window fails and never recovers on its own. Probing
+      // /api/health (which SharedSecretMiddleware always leaves open) is
+      // what actually confirms the server is ready to accept requests.
       await fs.access(API_TOKEN_PATH);
+      await fetch("http://127.0.0.1:5292/api/health", { signal: AbortSignal.timeout(1000) });
       return;
     } catch {
       await new Promise((resolve) => setTimeout(resolve, delayMs));
@@ -137,6 +160,18 @@ async function createMainWindow(): Promise<void> {
 }
 
 app.whenReady().then(async () => {
+  // Registered before the window loads (and before the API/token file are
+  // even guaranteed to exist yet): the renderer's Dashboard fires its
+  // getApiToken() IPC call the moment it mounts, so the handler must
+  // already be listening or that first invoke can resolve to `undefined`
+  // instead of erroring — which client.ts would then happily send as a
+  // literal "X-Api-Token: undefined" header, failing the server's
+  // comparison instead of surfacing a clear "not ready yet" error.
+  ipcMain.handle("get-api-token", async () => {
+    await waitForApiToken();
+    return fs.readFile(API_TOKEN_PATH, "utf-8");
+  });
+
   startApiProcessIfPackaged();
   try {
     await waitForApiToken();
@@ -148,10 +183,6 @@ app.whenReady().then(async () => {
     // at least see the app and any in-page error state.
   }
   await createMainWindow();
-
-  ipcMain.handle("get-api-token", async () => {
-    return fs.readFile(API_TOKEN_PATH, "utf-8");
-  });
 });
 
 app.on("window-all-closed", () => {
@@ -160,7 +191,46 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("before-quit", () => {
+let hasShutDownApi = false;
+
+app.on("before-quit", (event) => {
+  // apiProcess here is the PowerShell launcher (see startApiProcessIfPackaged),
+  // not the elevated API itself — killing it does nothing to the actual
+  // WebsiteWhitelistManual.Api.exe, and this unelevated process has no
+  // permission to terminate that higher-integrity process directly (Windows
+  // Mandatory Integrity Control blocks it even for the same user). Asking
+  // the API to shut itself down over its own HTTP endpoint is the only
+  // reliable way to avoid leaving it running as an orphan. before-quit
+  // handlers run synchronously by default, so quitting is deferred with
+  // preventDefault() until the shutdown request actually completes —
+  // otherwise Electron can tear the process down mid-fetch.
   apiProcess?.kill();
   staticServer?.close();
+
+  if (hasShutDownApi) {
+    return;
+  }
+  event.preventDefault();
+  void shutdownApiProcess().finally(() => {
+    hasShutDownApi = true;
+    app.quit();
+  });
 });
+
+async function shutdownApiProcess(): Promise<void> {
+  if (isDev) {
+    return;
+  }
+  try {
+    const token = await fs.readFile(API_TOKEN_PATH, "utf-8");
+    await fetch("http://127.0.0.1:5292/api/shutdown", {
+      method: "POST",
+      headers: { "X-Api-Token": token },
+      signal: AbortSignal.timeout(2000),
+    });
+  } catch {
+    // Best-effort: if the API never started, isn't reachable, or already
+    // shut down, there's nothing left to signal — quitting proceeds
+    // regardless (see the .finally() at the call site).
+  }
+}

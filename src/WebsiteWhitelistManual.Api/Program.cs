@@ -17,13 +17,20 @@ builder.Services.AddSingleton<ILocalAccountInspector, LocalAccountInspector>();
 builder.Services.AddCors(options =>
 {
     // The Electron renderer's origin in development is Vite's dev server
-    // (http://localhost:5173); in production a packaged Electron app's
-    // renderer runs from a custom scheme/local static server (see Task 3) —
-    // both are added here rather than using AllowAnyOrigin, since this API
-    // also carries a shared-secret header and there's no reason to loosen
-    // the origin check as well.
+    // (http://localhost:5173, fixed). In production, main.cts serves the
+    // built static files over loopback HTTP on a port chosen at random by
+    // server.listen(0, ...) every launch (needed because Chromium refuses
+    // module scripts loaded from a file:// origin) — so no fixed port can
+    // be whitelisted here. Matching any 127.0.0.1/localhost origin on any
+    // port is still safe: this API isn't reachable from the network (see
+    // the loopback-only bind below), and every request additionally still
+    // requires the X-Api-Token shared secret, which is the real boundary.
     options.AddDefaultPolicy(policy => policy
-        .WithOrigins("http://localhost:5173", "http://127.0.0.1:5293")
+        .SetIsOriginAllowed(origin =>
+        {
+            var uri = new Uri(origin);
+            return uri.IsLoopback;
+        })
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
@@ -44,5 +51,21 @@ app.UseMiddleware<SharedSecretMiddleware>(apiToken);
 app.MapGet("/api/health", () => Results.Ok(new { status = "ok" }));
 app.MapPolicyEndpoints();
 app.MapAccountEndpoints();
+
+// The Electron main process runs unelevated and cannot terminate this
+// (elevated) process itself — Windows' Mandatory Integrity Control blocks
+// a medium-integrity process from killing a high-integrity one even when
+// owned by the same user. main.cts calls this on app quit instead so the
+// API shuts itself down rather than becoming an orphaned background
+// process.
+app.MapPost("/api/shutdown", (IHostApplicationLifetime lifetime) =>
+{
+    _ = Task.Run(async () =>
+    {
+        await Task.Delay(200);
+        lifetime.StopApplication();
+    });
+    return Results.Ok();
+});
 
 app.Run("http://127.0.0.1:5292");
