@@ -48,6 +48,8 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 

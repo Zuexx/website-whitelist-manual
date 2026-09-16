@@ -3,7 +3,7 @@ import { Check, Globe2, Home, ListChecks, ShieldCheck, ShieldPlus, SlidersHorizo
 import { useWizard } from "../state/WizardContext";
 import "./NavRail.css";
 
-const APP_VERSION = "1.1.1";
+const APP_VERSION = "1.1.2";
 
 export function NavRail() {
   const { selectedBrowsers, allowlistSites, hasApplied } = useWizard();
