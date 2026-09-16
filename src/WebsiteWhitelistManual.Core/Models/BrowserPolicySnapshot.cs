@@ -7,4 +7,5 @@ public sealed record BrowserPolicySnapshot(
     IReadOnlyList<string> AllowedUrls,
     bool? IncognitoDisabled,
     bool? BrowserSigninDisabled,
-    bool? DeveloperToolsDisabled);
+    bool? DeveloperToolsDisabled,
+    bool? YouTubeRestrictEnabled);

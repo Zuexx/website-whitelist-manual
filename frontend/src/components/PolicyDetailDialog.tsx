@@ -12,6 +12,7 @@ function formatSnapshot(snapshot: PolicySnapshot): string {
       `停用無痕模式: ${browser.incognitoDisabled}`,
       `停用帳號切換 (BrowserSignin=0): ${browser.browserSigninDisabled}`,
       `停用開發人員工具: ${browser.developerToolsDisabled}`,
+      `YouTube 限制模式 (ForceYouTubeRestrict=2): ${browser.youTubeRestrictEnabled}`,
       "",
     ].join("\n"))
     .join("\n");

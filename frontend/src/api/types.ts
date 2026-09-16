@@ -8,6 +8,7 @@ export interface BrowserPolicySnapshot {
   incognitoDisabled: boolean | null;
   browserSigninDisabled: boolean | null;
   developerToolsDisabled: boolean | null;
+  youTubeRestrictEnabled: boolean | null;
 }
 
 export interface PolicySnapshot {
@@ -29,6 +30,7 @@ export interface AdvancedOptions {
   disableIncognito: boolean;
   disableAccountSwitching: boolean;
   disableDeveloperTools: boolean;
+  forceYouTubeRestrict: boolean;
 }
 
 export interface ApplyPolicyRequest {

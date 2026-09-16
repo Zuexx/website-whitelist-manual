@@ -30,4 +30,16 @@ public static class PolicyKeys
     /// Chrome's default New Tab Page is served locally and isn't affected.
     /// </summary>
     public const string EdgeNewTabPageContentEnabledValueName = "NewTabPageContentEnabled";
+
+    /// <summary>
+    /// Same value name on both Edge and Chrome. Does NOT stop a child from
+    /// clicking a sidebar/recommended video within an already-open YouTube
+    /// tab — YouTube's single-page-app navigation updates the URL via the
+    /// History API, which URLBlocklist/URLAllowlist never intercepts (this
+    /// is Google's documented, by-design behavior, not a bug). What this
+    /// does instead is force YouTube's own server-side Restricted Mode, so
+    /// whatever gets recommended/playable is filtered at the source.
+    /// 0 = off, 1 = Moderate, 2 = Strict.
+    /// </summary>
+    public const string ForceYouTubeRestrictValueName = "ForceYouTubeRestrict";
 }

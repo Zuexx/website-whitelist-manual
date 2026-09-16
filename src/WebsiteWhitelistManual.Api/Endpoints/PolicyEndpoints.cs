@@ -64,7 +64,8 @@ public static class PolicyEndpoints
             var advancedOptions = new AdvancedOptionsState(
                 request.AdvancedOptions.DisableIncognito,
                 request.AdvancedOptions.DisableAccountSwitching,
-                request.AdvancedOptions.DisableDeveloperTools);
+                request.AdvancedOptions.DisableDeveloperTools,
+                request.AdvancedOptions.ForceYouTubeRestrict);
 
             var configuration = new WizardConfiguration(browserTargets, allowlistSites, advancedOptions);
 

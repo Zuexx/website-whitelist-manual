@@ -70,6 +70,15 @@ public sealed class RegistryPolicyWriter : IRegistryPolicyWriter
             // PolicyKeys.EdgeNewTabPageContentEnabledValueName.
             _registry.SetDwordValue(target.RootPath, PolicyKeys.EdgeNewTabPageContentEnabledValueName, 0);
         }
+
+        if (configuration.AdvancedOptions.ForceYouTubeRestrict)
+        {
+            _registry.SetDwordValue(target.RootPath, PolicyKeys.ForceYouTubeRestrictValueName, 2);
+        }
+        else
+        {
+            _registry.DeleteValue(target.RootPath, PolicyKeys.ForceYouTubeRestrictValueName);
+        }
     }
 
     public void RemoveAll(IReadOnlyList<BrowserTarget> targets)

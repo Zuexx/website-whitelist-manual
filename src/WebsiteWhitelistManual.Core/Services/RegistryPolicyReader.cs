@@ -29,7 +29,8 @@ public sealed class RegistryPolicyReader : IRegistryPolicyReader
                 AllowedUrls: Array.Empty<string>(),
                 IncognitoDisabled: null,
                 BrowserSigninDisabled: null,
-                DeveloperToolsDisabled: null);
+                DeveloperToolsDisabled: null,
+                YouTubeRestrictEnabled: null);
         }
 
         var blockedUrls = ReadStringList($@"{target.RootPath}\{PolicyKeys.UrlBlocklistSubKey}");
@@ -38,6 +39,7 @@ public sealed class RegistryPolicyReader : IRegistryPolicyReader
         var incognito = _registry.GetDwordValue(target.RootPath, target.IncognitoValueName);
         var signin = _registry.GetDwordValue(target.RootPath, PolicyKeys.BrowserSigninValueName);
         var devTools = _registry.GetDwordValue(target.RootPath, PolicyKeys.DeveloperToolsAvailabilityValueName);
+        var youTubeRestrict = _registry.GetDwordValue(target.RootPath, PolicyKeys.ForceYouTubeRestrictValueName);
 
         return new BrowserPolicySnapshot(
             target.Id,
@@ -46,7 +48,8 @@ public sealed class RegistryPolicyReader : IRegistryPolicyReader
             AllowedUrls: allowedUrls,
             IncognitoDisabled: incognito.HasValue ? incognito.Value == 1 : null,
             BrowserSigninDisabled: signin.HasValue ? signin.Value == 0 : null,
-            DeveloperToolsDisabled: devTools.HasValue ? devTools.Value == 2 : null);
+            DeveloperToolsDisabled: devTools.HasValue ? devTools.Value == 2 : null,
+            YouTubeRestrictEnabled: youTubeRestrict.HasValue ? youTubeRestrict.Value == 2 : null);
     }
 
     private IReadOnlyList<string> ReadStringList(string subKeyPath)

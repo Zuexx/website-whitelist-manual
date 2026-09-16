@@ -1,9 +1,9 @@
-import { Code2, EyeOff, UserX } from "lucide-react";
+import { Code2, EyeOff, UserX, Youtube } from "lucide-react";
 import { useWizard } from "../state/WizardContext";
 import "./Step3AdvancedPage.css";
 
 const options: {
-  key: "disableIncognito" | "disableDeveloperTools" | "disableAccountSwitching";
+  key: "disableIncognito" | "disableDeveloperTools" | "disableAccountSwitching" | "forceYouTubeRestrict";
   title: string;
   description: string;
   registryNote: string;
@@ -29,6 +29,14 @@ const options: {
     description: "禁止在瀏覽器中切換至未受管的其他帳號，確保白名單防護不會被多帳號登入繞過。",
     registryNote: "Windows 原則值：BrowserSignin = 0",
     icon: UserX,
+  },
+  {
+    key: "forceYouTubeRestrict",
+    title: "強制開啟 YouTube 限制模式",
+    description:
+      "無法阻止孩子點擊已允許影片頁面側欄中的推薦影片（YouTube 用網頁內導覽切換影片，白名單機制攔不到這種情況），但會強制套用 YouTube 自己的「限制模式」，過濾成人/敏感內容的推薦與播放。",
+    registryNote: "Windows 原則值：ForceYouTubeRestrict = 2 (Strict)",
+    icon: Youtube,
   },
 ];
 

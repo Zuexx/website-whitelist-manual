@@ -146,6 +146,50 @@ public class RegistryPolicyWriterTests
     }
 
     [Fact]
+    public void Apply_WritesForceYouTubeRestrictStrict_WhenEnabled()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge, BrowserTarget.Chrome }, new[] { MakeSite("example.com") },
+            new AdvancedOptionsState(ForceYouTubeRestrict: true));
+
+        writer.Apply(config);
+
+        Assert.Equal(2, registry.GetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "ForceYouTubeRestrict"));
+        Assert.Equal(2, registry.GetDwordValue(@"SOFTWARE\Policies\Google\Chrome", "ForceYouTubeRestrict"));
+    }
+
+    [Fact]
+    public void Apply_DoesNotSetForceYouTubeRestrict_WhenDisabled()
+    {
+        var registry = new FakeWindowsRegistry();
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge }, new[] { MakeSite("example.com") },
+            new AdvancedOptionsState(ForceYouTubeRestrict: false));
+
+        writer.Apply(config);
+
+        Assert.Null(registry.GetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "ForceYouTubeRestrict"));
+    }
+
+    [Fact]
+    public void Apply_ClearsForceYouTubeRestrict_WhenTurnedOff()
+    {
+        var registry = new FakeWindowsRegistry();
+        registry.SetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "ForceYouTubeRestrict", 2);
+        var writer = new RegistryPolicyWriter(registry);
+        var config = new WizardConfiguration(
+            new[] { BrowserTarget.Edge }, new[] { MakeSite("example.com") },
+            new AdvancedOptionsState(ForceYouTubeRestrict: false));
+
+        writer.Apply(config);
+
+        Assert.Null(registry.GetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "ForceYouTubeRestrict"));
+    }
+
+    [Fact]
     public void Apply_WritesToEveryBrowserTarget()
     {
         var registry = new FakeWindowsRegistry();

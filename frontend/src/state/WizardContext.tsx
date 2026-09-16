@@ -20,6 +20,10 @@ const defaultAdvancedOptions: AdvancedOptions = {
   disableIncognito: true,
   disableAccountSwitching: true,
   disableDeveloperTools: true,
+  // Off by default, unlike the other three: this is an opt-in content
+  // filter, not a security-critical default the parent should be forced
+  // into enabling.
+  forceYouTubeRestrict: false,
 };
 
 const WizardContext = createContext<WizardContextValue | null>(null);

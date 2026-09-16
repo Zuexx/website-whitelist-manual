@@ -9,7 +9,8 @@ public sealed record AllowlistSiteRequest(string Domain, string? CategoryLabel);
 public sealed record AdvancedOptionsRequest(
     bool DisableIncognito,
     bool DisableAccountSwitching,
-    bool DisableDeveloperTools);
+    bool DisableDeveloperTools,
+    bool ForceYouTubeRestrict);
 
 public sealed record ApplyPolicyRequest(
     IReadOnlyList<string> BrowserIds, // "Edge" and/or "Chrome", matching BrowserId enum names
@@ -25,7 +26,8 @@ public sealed record BrowserPolicySnapshotResponse(
     IReadOnlyList<string> AllowedUrls,
     bool? IncognitoDisabled,
     bool? BrowserSigninDisabled,
-    bool? DeveloperToolsDisabled)
+    bool? DeveloperToolsDisabled,
+    bool? YouTubeRestrictEnabled)
 {
     public static BrowserPolicySnapshotResponse FromDomain(BrowserPolicySnapshot snapshot) => new(
         snapshot.BrowserId.ToString(),
@@ -34,7 +36,8 @@ public sealed record BrowserPolicySnapshotResponse(
         snapshot.AllowedUrls,
         snapshot.IncognitoDisabled,
         snapshot.BrowserSigninDisabled,
-        snapshot.DeveloperToolsDisabled);
+        snapshot.DeveloperToolsDisabled,
+        snapshot.YouTubeRestrictEnabled);
 }
 
 public sealed record PolicySnapshotResponse(IReadOnlyList<BrowserPolicySnapshotResponse> Browsers)

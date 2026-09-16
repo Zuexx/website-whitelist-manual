@@ -61,6 +61,33 @@ public class RegistryPolicyReaderTests
     }
 
     [Fact]
+    public void ReadSnapshot_ReadsYouTubeRestrictAsEnabled_OnlyForStrictValue()
+    {
+        var registry = new FakeWindowsRegistry();
+        registry.EnsureSubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge");
+        registry.SetDwordValue(@"SOFTWARE\Policies\Microsoft\Edge", "ForceYouTubeRestrict", 2);
+        var reader = new RegistryPolicyReader(registry);
+
+        var snapshot = reader.ReadSnapshot(new[] { BrowserTarget.Edge });
+
+        var edge = Assert.Single(snapshot.Browsers);
+        Assert.True(edge.YouTubeRestrictEnabled);
+    }
+
+    [Fact]
+    public void ReadSnapshot_ReportsYouTubeRestrictAsNull_WhenNeverSet()
+    {
+        var registry = new FakeWindowsRegistry();
+        registry.EnsureSubKeyExists(@"SOFTWARE\Policies\Microsoft\Edge");
+        var reader = new RegistryPolicyReader(registry);
+
+        var snapshot = reader.ReadSnapshot(new[] { BrowserTarget.Edge });
+
+        var edge = Assert.Single(snapshot.Browsers);
+        Assert.Null(edge.YouTubeRestrictEnabled);
+    }
+
+    [Fact]
     public void ReadSnapshot_UsesChromeSpecificIncognitoValueName()
     {
         var registry = new FakeWindowsRegistry();

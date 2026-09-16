@@ -11,7 +11,12 @@ interface VerificationRow {
   detail: string;
 }
 
-function buildVerificationRows(snapshot: PolicySnapshot, expectedDomains: string[], expectIncognitoDisabled: boolean): VerificationRow[] {
+function buildVerificationRows(
+  snapshot: PolicySnapshot,
+  expectedDomains: string[],
+  expectIncognitoDisabled: boolean,
+  expectYouTubeRestrict: boolean,
+): VerificationRow[] {
   const sortedExpected = [...expectedDomains].sort();
   const rows: VerificationRow[] = [];
 
@@ -37,6 +42,17 @@ function buildVerificationRows(snapshot: PolicySnapshot, expectedDomains: string
       passed: browser.incognitoDisabled === expectIncognitoDisabled,
       detail: `IncognitoModeAvailability/InPrivateModeAvailability 目前值：${browser.incognitoDisabled}`,
     });
+
+    // Only shown when the parent actually turned this on — otherwise an
+    // unchecked option would show a misleading "passed" row for a
+    // protection nobody asked for.
+    if (expectYouTubeRestrict) {
+      rows.push({
+        label: `${browser.browserId}：YouTube 限制模式機碼已核對`,
+        passed: browser.youTubeRestrictEnabled === true,
+        detail: `ForceYouTubeRestrict 目前值：${browser.youTubeRestrictEnabled ? "已啟用 (Strict)" : "未啟用"}`,
+      });
+    }
   }
 
   return rows;
@@ -56,7 +72,12 @@ export function Step5CompletePage() {
     setIsRefreshing(true);
     try {
       const snapshot = await apiClient.getSnapshot();
-      setRows(buildVerificationRows(snapshot, expectedDomains, advancedOptions.disableIncognito));
+      setRows(buildVerificationRows(
+        snapshot,
+        expectedDomains,
+        advancedOptions.disableIncognito,
+        advancedOptions.forceYouTubeRestrict,
+      ));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
